@@ -32,15 +32,30 @@ export interface ActionEvent<Event extends SyntheticEvent = SyntheticEvent, Mode
 	model?: Model;
 }
 
-export interface ActionOptions {
-	type: InputType;
-	fire: (event: ActionEvent<Mapping[this['type']]>) => void;
+export interface ActionOptionsMouse{
+	type: InputType.MOUSE_DOWN | InputType.MOUSE_MOVE | InputType.MOUSE_UP;
+	fire: (event: ActionEvent<MouseEvent>) => void;
 }
+export interface ActionOptionsWheel{
+type: InputType.MOUSE_WHEEL;
+fire: (event: ActionEvent<WheelEvent>) => void;
+}
+
+export interface ActionOptionsKeyboard{
+type: InputType.KEY_DOWN | InputType.KEY_UP;
+fire: (event: ActionEvent<KeyboardEvent>) => void;
+}
+export interface ActionOptionsTouch{
+type: InputType.TOUCH_END | InputType.TOUCH_MOVE | InputType.TOUCH_START;
+fire: (event: ActionEvent<TouchEvent>) => void;
+}
+
+type ActionOptions = ActionOptionsMouse | ActionOptionsWheel | ActionOptionsKeyboard  | ActionOptionsTouch
 
 export class Action<T extends CanvasEngine = CanvasEngine> {
 	options: ActionOptions;
 	id: string;
-	engine: T;
+	engine: T | undefined;
 
 	constructor(options: ActionOptions) {
 		this.options = options;
