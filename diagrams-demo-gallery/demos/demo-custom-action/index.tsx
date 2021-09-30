@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import createEngine, { DiagramModel, DefaultNodeModel, DefaultLinkModel } from '@projectstorm/react-diagrams';
-import { CanvasWidget, Action, ActionEvent, InputType } from '@projectstorm/react-canvas-core';
+import { CanvasWidget, Action, ActionEvent, InputType, CanvasEngine } from '@projectstorm/react-canvas-core';
 import { DemoCanvasWidget } from '../helpers/DemoCanvasWidget';
 
 interface CustomDeleteItemsActionOptions {
@@ -12,7 +12,7 @@ interface CustomDeleteItemsActionOptions {
  * Deletes all selected items, but asks for confirmation first
  */
 class CustomDeleteItemsAction extends Action {
-	constructor(options: CustomDeleteItemsActionOptions = {}) {
+	constructor(engine: CanvasEngine, options: CustomDeleteItemsActionOptions = {}) {
 		options = {
 			keyCodes: [46, 8],
 			...options
@@ -37,14 +37,15 @@ class CustomDeleteItemsAction extends Action {
 					}
 				}
 			}
-		});
+		}, engine);
 	}
 }
 
 export default () => {
-	// create an engine without registering DeleteItemsAction
-	const engine = createEngine({ registerDefaultDeleteItemsAction: false });
 	const model = new DiagramModel();
+
+	// create an engine without registering DeleteItemsAction
+	const engine = createEngine(model, { registerDefaultDeleteItemsAction: false });
 
 	const node1 = new DefaultNodeModel({ name: 'Node 1', color: 'rgb(0,192,255)' });
 	node1.setPosition(100, 100);
@@ -63,7 +64,7 @@ export default () => {
 	engine.setModel(model);
 
 	// register an DeleteItemsAction with custom keyCodes (in this case, only Delete key)
-	engine.getActionEventBus().registerAction(new CustomDeleteItemsAction());
+	engine.getActionEventBus().registerAction(new CustomDeleteItemsAction(engine));
 
 	return (
 		<DemoCanvasWidget>

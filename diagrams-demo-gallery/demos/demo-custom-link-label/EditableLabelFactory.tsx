@@ -6,8 +6,8 @@ import { EditableLabelModel } from './EditableLabelModel';
 import { EditableLabelWidget } from './EditableLabelWidget';
 
 export class EditableLabelFactory extends AbstractReactFactory<EditableLabelModel, DiagramEngine> {
-	constructor() {
-		super('editable-label');
+	constructor(engine: DiagramEngine) {
+		super('editable-label', engine);
 	}
 
 	generateModel(): EditableLabelModel {

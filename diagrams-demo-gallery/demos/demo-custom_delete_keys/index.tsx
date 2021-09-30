@@ -4,9 +4,10 @@ import { CanvasWidget, DeleteItemsAction } from '@projectstorm/react-canvas-core
 import { DemoCanvasWidget } from '../helpers/DemoCanvasWidget';
 
 export default () => {
-	// create an engine without registering DeleteItemsAction
-	const engine = createEngine({ registerDefaultDeleteItemsAction: false });
 	const model = new DiagramModel();
+
+	// create an engine without registering DeleteItemsAction
+	const engine = createEngine(model, { registerDefaultDeleteItemsAction: false });
 
 	const node1 = new DefaultNodeModel({ name: 'Node 1', color: 'rgb(0,192,255)' });
 	node1.setPosition(100, 100);
@@ -25,7 +26,7 @@ export default () => {
 	engine.setModel(model);
 
 	// register an DeleteItemsAction with custom keyCodes (in this case, only Delete key)
-	engine.getActionEventBus().registerAction(new DeleteItemsAction({ keyCodes: [46] }));
+	engine.getActionEventBus().registerAction(new DeleteItemsAction({ keyCodes: [46] }, engine));
 
 	return (
 		<DemoCanvasWidget>

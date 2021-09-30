@@ -21,7 +21,7 @@ export * from '@projectstorm/react-diagrams-routing';
 /**
  * Construct an engine with the defaults installed
  */
-export default (model: DiagramModel, options: CanvasEngineOptions = {}): DiagramEngine => {
+export default (model: DiagramModel = new DiagramModel(), options: CanvasEngineOptions = {}): DiagramEngine => {
 	const engine = new DiagramEngine(model,options);
 
 	// register model factories

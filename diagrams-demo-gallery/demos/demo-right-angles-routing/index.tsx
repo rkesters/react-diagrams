@@ -22,7 +22,7 @@ export class RightAnglePortModel extends DefaultPortModel {
 export default () => {
 	// setup the diagram engine
 	const engine = createEngine();
-	engine.getLinkFactories().registerFactory(new RightAngleLinkFactory());
+	engine.getLinkFactories().registerFactory(new RightAngleLinkFactory(engine));
 
 	// setup the diagram model
 	const model = new DiagramModel();

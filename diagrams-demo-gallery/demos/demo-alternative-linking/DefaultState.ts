@@ -15,12 +15,12 @@ export class DefaultState extends State<DiagramEngine> {
 	createLink: CreateLinkState;
 	dragItems: DragDiagramItemsState;
 
-	constructor() {
-		super({ name: 'starting-state' });
-		this.childStates = [new SelectingState()];
-		this.dragCanvas = new DragCanvasState();
-		this.createLink = new CreateLinkState();
-		this.dragItems = new DragDiagramItemsState();
+	constructor(engine: DiagramEngine) {
+		super(engine, { name: 'starting-state' });
+		this.childStates = [new SelectingState(engine)];
+		this.dragCanvas = new DragCanvasState(engine);
+		this.createLink = new CreateLinkState(engine);
+		this.dragItems = new DragDiagramItemsState(engine);
 
 		// determine what was clicked on
 		this.registerAction(
@@ -42,7 +42,7 @@ export class DefaultState extends State<DiagramEngine> {
 						this.transitionWithEvent(this.dragItems, event);
 					}
 				}
-			})
+			}, engine)
 		);
 
 		// touch drags the canvas
@@ -50,9 +50,9 @@ export class DefaultState extends State<DiagramEngine> {
 			new Action({
 				type: InputType.TOUCH_START,
 				fire: (event: ActionEvent<TouchEvent>) => {
-					this.transitionWithEvent(new DragCanvasState(), event);
+					this.transitionWithEvent(new DragCanvasState(engine), event);
 				}
-			})
+			}, engine)
 		);
 
 		this.registerAction(
@@ -63,7 +63,7 @@ export class DefaultState extends State<DiagramEngine> {
 
 					if (element instanceof PortModel) this.transitionWithEvent(this.createLink, event);
 				}
-			})
+			}, engine)
 		);
 	}
 }

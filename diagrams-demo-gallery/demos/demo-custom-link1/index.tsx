@@ -3,7 +3,8 @@ import createEngine, {
 	DefaultNodeModel,
 	DefaultPortModel,
 	DefaultLinkFactory,
-	DefaultLinkModel
+	DefaultLinkModel,
+	DiagramEngine
 } from '@projectstorm/react-diagrams';
 import * as React from 'react';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
@@ -90,8 +91,8 @@ export class AdvancedLinkSegment extends React.Component<{ model: AdvancedLinkMo
 }
 
 export class AdvancedLinkFactory extends DefaultLinkFactory {
-	constructor() {
-		super('advanced');
+	constructor(engine: DiagramEngine) {
+		super(engine, 'advanced');
 	}
 
 	generateModel(): AdvancedLinkModel {
@@ -115,7 +116,7 @@ export class AdvancedLinkFactory extends DefaultLinkFactory {
 export default () => {
 	//1) setup the diagram engine
 	var engine = createEngine();
-	engine.getLinkFactories().registerFactory(new AdvancedLinkFactory());
+	engine.getLinkFactories().registerFactory(new AdvancedLinkFactory(engine));
 
 	// create some nodes
 	var node1 = new DefaultNodeModel('Source', 'rgb(0,192,255)');

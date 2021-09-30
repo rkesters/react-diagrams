@@ -1,10 +1,14 @@
+import { DiagramEngine } from '@projectstorm/react-diagrams-core';
 import { PathFinding } from '../src/engine/PathFinding';
+import { PathFindingLinkFactory } from '../src/link/PathFindingLinkFactory';
 
 describe('calculating start and end points', function () {
-	let pathFinding: PathFinding = new PathFinding(null);
+	let engine: DiagramEngine = new DiagramEngine();
+	let factory: PathFindingLinkFactory = new PathFindingLinkFactory(engine);
+	let pathFinding: PathFinding = new PathFinding(factory);
 
 	beforeEach(() => {
-		pathFinding = new PathFinding(null);
+		pathFinding = new PathFinding(factory);
 	});
 
 	test('return correct object for valid walkable input', () => {
@@ -27,19 +31,19 @@ describe('calculating start and end points', function () {
 
 		const result = pathFinding.calculateLinkStartEndCoords(matrix, path);
 
-		expect(result.start).toEqual({
+		expect(result?.start).toEqual({
 			x: 2,
 			y: 3
 		});
-		expect(result.end).toEqual({
+		expect(result?.end).toEqual({
 			x: 3,
 			y: 2
 		});
-		expect(result.pathToStart).toEqual([
+		expect(result?.pathToStart).toEqual([
 			[0, 5],
 			[1, 4]
 		]);
-		expect(result.pathToEnd).toEqual([
+		expect(result?.pathToEnd).toEqual([
 			[3, 2],
 			[4, 1],
 			[5, 0]

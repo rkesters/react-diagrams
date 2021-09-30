@@ -6,6 +6,11 @@ describe('simple flow test', () => {
 		await page.goto(`file://${__dirname}/../.out/iframe.html?path=/story/simple-usage--simple-flow-example`);
 	});
 
+	afterEach( () => {
+		console.log('done');
+		console.log('quiting');
+	})
+
 	it('drag link to port adds a link', async () => {
 		// create a new link
 		let node1 = new E2ENode('Node 3');

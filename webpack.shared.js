@@ -30,7 +30,7 @@ module.exports = (directory) => {
 		devtool: production ? 'source-map' : 'cheap-module-source-map',
 		mode: production ? 'production' : 'development',
 		optimization: {
-			minimizer: [new TerserPlugin()]
+					minimizer: [new TerserPlugin()]
 		}
 	};
 };

@@ -45,6 +45,7 @@ export abstract class State<E extends CanvasEngine = CanvasEngine> {
 	}
 
 	registerAction(action: Action) {
+		console.log(`State is registering actions ${action.options.type}`);
 		this.actions.push(action);
 	}
 
@@ -79,12 +80,13 @@ export abstract class State<E extends CanvasEngine = CanvasEngine> {
 		return _.intersection(this.keys, keys).length === this.keys.length;
 	}
 
-	activated(previous: State) {
+	activated(_previous: State |null | undefined) {
 		const keys = this.engine.getActionEventBus().getKeys();
-
+		console.log(`State activated 1`);
 		if (this.tryActivateParentState(keys) || this.tryActivateChildState(keys)) {
 			return;
 		}
+		console.log(`State activated 2`);
 
 		// perhaps we need to pop again?
 		this.handler1 = this.engine.getActionEventBus().registerAction(
@@ -105,9 +107,12 @@ export abstract class State<E extends CanvasEngine = CanvasEngine> {
 			}, this.engine)
 		);
 
+		console.group(`State activating actions ${this.actions.length}`);
 		for (let action of this.actions) {
+			console.log(`${action.id} ${action.options.type}`);
 			this.engine.getActionEventBus().registerAction(action);
 		}
+		console.groupEnd();
 	}
 
 	deactivated(next: State) {

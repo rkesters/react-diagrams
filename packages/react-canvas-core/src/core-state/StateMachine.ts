@@ -44,7 +44,7 @@ export class StateMachine extends BaseObserver<StateMachineListener> {
 		}
 		const old = this.currentState;
 		this.currentState = state;
-		if (state && old) {
+		if (state) {
 			this.currentState.activated(old);
 			this.fireEvent<'stateChanged'>(
 				{

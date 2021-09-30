@@ -21,6 +21,7 @@ export class ActionEventBus {
 
 	registerAction(action: Action): () => void {
 		action.setEngine(this.engine);
+		console.log(`registerAction ${action.id} ${action.options.type}`)
 		this.actions[action.id] = action;
 		return () => {
 			this.deregisterAction(action);
@@ -28,6 +29,7 @@ export class ActionEventBus {
 	}
 
 	deregisterAction(action: Action) {
+		console.log(`deregisterAction ${action.id} ${action.options.type}`)
 		delete this.actions[action.id];
 	}
 
@@ -75,6 +77,7 @@ export class ActionEventBus {
 
 	fireAction(actionEvent: ActionEvent) {
 		const actions = this.getActionsForEvent(actionEvent);
+		console.log(`fireAction ${actionEvent.event.type} ${actions.length}`)
 		for (let action of actions) {
 			action.options.fire(actionEvent as any);
 		}

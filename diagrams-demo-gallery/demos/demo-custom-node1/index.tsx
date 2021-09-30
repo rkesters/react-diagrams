@@ -18,8 +18,8 @@ export default () => {
 	// register some other factories as well
 	engine
 		.getPortFactories()
-		.registerFactory(new SimplePortFactory('diamond', (config) => new DiamondPortModel(PortModelAlignment.LEFT)));
-	engine.getNodeFactories().registerFactory(new DiamondNodeFactory());
+		.registerFactory(new SimplePortFactory('diamond', (config) => new DiamondPortModel(PortModelAlignment.LEFT), engine));
+	engine.getNodeFactories().registerFactory(new DiamondNodeFactory(engine));
 
 	//2) setup the diagram model
 	var model = new DiagramModel();

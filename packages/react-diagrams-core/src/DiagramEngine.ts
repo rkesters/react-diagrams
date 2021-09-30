@@ -30,7 +30,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 
 	maxNumberPointsPerLink: number;
 
-	constructor(model: DiagramModel, options: CanvasEngineOptions = {}) {
+	constructor(model: DiagramModel = new DiagramModel(), options: CanvasEngineOptions = {}) {
 		super(model, options);
 		this.maxNumberPointsPerLink = 1000;
 

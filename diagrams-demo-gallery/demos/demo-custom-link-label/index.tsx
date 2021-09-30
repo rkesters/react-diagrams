@@ -11,14 +11,14 @@ import { EditableLabelModel } from './EditableLabelModel';
  */
 
 export default () => {
-	// engine setup
-	const engine = createEngine();
-
-	// register our label factory
-	engine.getLabelFactories().registerFactory(new EditableLabelFactory());
-
 	// setup diagram model
 	const model = new DiagramModel();
+
+	// engine setup
+	const engine = createEngine(model);
+
+	// register our label factory
+	engine.getLabelFactories().registerFactory(new EditableLabelFactory(engine));
 
 	// create some nodes
 	const node1 = new DefaultNodeModel('Node1', 'red');

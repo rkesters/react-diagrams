@@ -23,7 +23,7 @@ export class EditableLabelModel extends LabelModel {
 		};
 	}
 
-	deserialize(event: DeserializeEvent<this>): void {
+	deserialize(event: DeserializeEvent<ReturnType<EditableLabelModel['serialize']>>): void {
 		super.deserialize(event);
 		this.value = event.data.value;
 	}

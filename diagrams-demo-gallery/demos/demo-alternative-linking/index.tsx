@@ -21,7 +21,7 @@ export default () => {
 	engine.setModel(model);
 
 	// Use this custom "DefaultState" instead of the actual default state we get with the engine
-	engine.getStateMachine().pushState(new DefaultState());
+	engine.getStateMachine().pushState(new DefaultState(engine));
 
 	return (
 		<DemoCanvasWidget>

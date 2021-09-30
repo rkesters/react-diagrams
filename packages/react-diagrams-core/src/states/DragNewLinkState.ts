@@ -35,12 +35,13 @@ export class DragNewLinkState extends AbstractDisplacementState<DiagramEngine> {
 			allowLinksFromLockedPorts: false,
 			...options
 		};
-
+		console.log(`DragNewLinkState registing actions`);
 		this.registerAction(
 			new Action({
 				type: InputType.MOUSE_DOWN,
 				//TODO: FIX ANY
 				fire: (event: ActionEvent<MouseEvent, any>) => {
+					console.log(`DragNewLinkState firing mouse down`);
 					this.port = this.engine.getMouseElement(event.event) as PortModel;
 					if (!this.config.allowLinksFromLockedPorts && this.port.isLocked()) {
 						this.eject();
@@ -50,6 +51,7 @@ export class DragNewLinkState extends AbstractDisplacementState<DiagramEngine> {
 
 					// if no link is given, just eject the state
 					if (!this.link) {
+						console.log(`DragNewLinkState ejecting link`);
 						this.eject();
 						return;
 					}

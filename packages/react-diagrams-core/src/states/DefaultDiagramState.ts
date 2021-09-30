@@ -26,6 +26,7 @@ export class DefaultDiagramState extends State<DiagramEngine> {
 		this.dragNewLink = new DragNewLinkState(engine);
 		this.dragItems = new DragDiagramItemsState(engine);
 
+		console.log(`DefaultDiagramState registing actions`);
 		// determine what was clicked on
 		this.registerAction(
 			new Action({

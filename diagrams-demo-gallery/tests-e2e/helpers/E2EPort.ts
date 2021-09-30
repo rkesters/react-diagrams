@@ -12,18 +12,27 @@ export class E2EPort extends E2EBase {
 	}
 
 	async getLinks(): Promise<E2ELink[]> {
-		const attribute = await page.evaluate((id) => {
-			return document.querySelector(id).getAttribute('data-links');
-		}, this.selector());
-		if (attribute.trim() === '') {
-			return [];
-		}
 
-		return _.map(attribute.split(','), (id) => {
-			const e = new E2ELink(id);
-			e.isID = true;
-			return e;
-		});
+		try {
+			/* istanbul ignore next */
+			const attribute = await page.evaluate((id) => {
+				/* istanbul ignore next */
+				const elm = document.querySelector(id);
+				if (!elm) return '';
+				return elm.getAttribute('data-links');
+			}, this.selector());
+			if (attribute.trim() === '') {
+				return [];
+			}
+
+			return _.map(attribute.split(','), (id) => {
+				const e = new E2ELink(id);
+				e.isID = true;
+				return e;
+			});
+		} catch (e) {
+			throw new Error(`E2Eport puppet eval failed: ${e.message}`);
+		}
 	}
 
 	async link(port: E2EPort): Promise<E2ELink> {

@@ -9,8 +9,8 @@ export class CreateLinkState extends State<DiagramEngine> {
 	sourcePort: PortModel;
 	link: LinkModel;
 
-	constructor() {
-		super({ name: 'create-new-link' });
+	constructor(engine: DiagramEngine) {
+		super(engine, {  name: 'create-new-link' });
 
 		this.registerAction(
 			new Action({
@@ -51,7 +51,7 @@ export class CreateLinkState extends State<DiagramEngine> {
 
 					this.engine.repaintCanvas();
 				}
-			})
+			}, engine)
 		);
 
 		this.registerAction(
@@ -63,7 +63,7 @@ export class CreateLinkState extends State<DiagramEngine> {
 					this.link.getLastPoint().setPosition(event.clientX, event.clientY);
 					this.engine.repaintCanvas();
 				}
-			})
+			}, engine)
 		);
 
 		this.registerAction(
@@ -78,7 +78,7 @@ export class CreateLinkState extends State<DiagramEngine> {
 						this.engine.repaintCanvas();
 					}
 				}
-			})
+			}, engine)
 		);
 	}
 

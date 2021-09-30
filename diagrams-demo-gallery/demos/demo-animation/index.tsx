@@ -26,11 +26,10 @@ class NodeDelayedPosition extends React.Component<any, any> {
 }
 
 export default () => {
-	//1) setup the diagram engine
-	var engine = createEngine({ repaintDebounceMs: 12 });
-
-	//2) setup the diagram model
+	//1) setup the diagram model
 	var model = new DiagramModel();
+	//2) setup the diagram engine
+	var engine = createEngine(model, { repaintDebounceMs: 12 });
 
 	//3-A) create a default node
 	var node1 = new DefaultNodeModel('Node 1', 'rgb(0,192,255)');
