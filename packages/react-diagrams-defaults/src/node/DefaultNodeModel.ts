@@ -90,7 +90,7 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 		return this.addPort(p);
 	}
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<DefaultNodeModel['serialize']>>) {
 		super.deserialize(event);
 		this.options.name = event.data.name;
 		this.options.color = event.data.color;

@@ -23,12 +23,12 @@ export interface DragNewLinkStateOptions {
 }
 
 export class DragNewLinkState extends AbstractDisplacementState<DiagramEngine> {
-	port: PortModel;
-	link: LinkModel;
+	port: PortModel | undefined | null;
+	link: LinkModel | undefined | null;
 	config: DragNewLinkStateOptions;
 
-	constructor(options: DragNewLinkStateOptions = {}) {
-		super({ name: 'drag-new-link' });
+	constructor(engine: DiagramEngine, options: DragNewLinkStateOptions = {}) {
+		super(engine, { name: 'drag-new-link' });
 
 		this.config = {
 			allowLooseLinks: true,
@@ -39,7 +39,8 @@ export class DragNewLinkState extends AbstractDisplacementState<DiagramEngine> {
 		this.registerAction(
 			new Action({
 				type: InputType.MOUSE_DOWN,
-				fire: (event: ActionEvent<MouseEvent, PortModel>) => {
+				//TODO: FIX ANY
+				fire: (event: ActionEvent<MouseEvent, any>) => {
 					this.port = this.engine.getMouseElement(event.event) as PortModel;
 					if (!this.config.allowLinksFromLockedPorts && this.port.isLocked()) {
 						this.eject();
@@ -57,7 +58,7 @@ export class DragNewLinkState extends AbstractDisplacementState<DiagramEngine> {
 					this.engine.getModel().addLink(this.link);
 					this.port.reportPosition();
 				}
-			})
+			},engine)
 		);
 
 		this.registerAction(
@@ -67,24 +68,24 @@ export class DragNewLinkState extends AbstractDisplacementState<DiagramEngine> {
 					const model = this.engine.getMouseElement(event.event);
 					// check to see if we connected to a new port
 					if (model instanceof PortModel) {
-						if (this.port.canLinkToPort(model)) {
-							this.link.setTargetPort(model);
+						if (this.port?.canLinkToPort(model)) {
+							this.link?.setTargetPort(model);
 							model.reportPosition();
 							this.engine.repaintCanvas();
 							return;
 						} else {
-							this.link.remove();
+							this.link?.remove();
 							this.engine.repaintCanvas();
 							return;
 						}
 					}
 
 					if (!this.config.allowLooseLinks) {
-						this.link.remove();
+						this.link?.remove();
 						this.engine.repaintCanvas();
 					}
 				}
-			})
+			}, engine)
 		);
 	}
 
@@ -93,8 +94,10 @@ export class DragNewLinkState extends AbstractDisplacementState<DiagramEngine> {
 	 * In order to be as precise as possible the mouse initialXRelative & initialYRelative are taken into account as well
 	 * as the possible engine offset
 	 */
-	fireMouseMoved(event: AbstractDisplacementStateEvent): any {
-		const portPos = this.port.getPosition();
+	fireMouseMoved(event: AbstractDisplacementStateEvent):void {
+
+		const portPos = this.port?.getPosition();
+		if (!portPos) {return;}
 		const zoomLevelPercentage = this.engine.getModel().getZoomLevel() / 100;
 		const engineOffsetX = this.engine.getModel().getOffsetX() / zoomLevelPercentage;
 		const engineOffsetY = this.engine.getModel().getOffsetY() / zoomLevelPercentage;
@@ -103,7 +106,7 @@ export class DragNewLinkState extends AbstractDisplacementState<DiagramEngine> {
 		const linkNextX = portPos.x - engineOffsetX + (initialXRelative - portPos.x) + event.virtualDisplacementX;
 		const linkNextY = portPos.y - engineOffsetY + (initialYRelative - portPos.y) + event.virtualDisplacementY;
 
-		this.link.getLastPoint().setPosition(linkNextX, linkNextY);
+		this.link?.getLastPoint().setPosition(linkNextX, linkNextY);
 		this.engine.repaintCanvas();
 	}
 }

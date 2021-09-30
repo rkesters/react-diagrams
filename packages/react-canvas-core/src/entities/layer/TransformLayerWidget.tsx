@@ -39,6 +39,7 @@ export class TransformLayerWidget extends React.Component<TransformLayerWidgetPr
 
 	getTransform() {
 		const model = this.props.layer.getParent();
+		if(!model) {return '';}
 		return `
 			translate(
 				${model.getOffsetX()}px,

@@ -8,15 +8,15 @@ import { DiagramEngine } from '@projectstorm/react-diagrams-core';
  * @author Dylan Vorster
  */
 export class DefaultLabelFactory extends AbstractReactFactory<DefaultLabelModel, DiagramEngine> {
-	constructor() {
-		super('default');
+	constructor(engine: DiagramEngine) {
+		super('default', engine);
 	}
 
-	generateReactWidget(event): JSX.Element {
+	generateReactWidget(event: {model: DefaultLabelModel}): JSX.Element {
 		return <DefaultLabelWidget model={event.model} />;
 	}
 
-	generateModel(event): DefaultLabelModel {
+	generateModel(_event: any): DefaultLabelModel {
 		return new DefaultLabelModel();
 	}
 }

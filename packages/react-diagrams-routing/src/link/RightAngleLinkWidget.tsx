@@ -3,7 +3,6 @@ import { DiagramEngine, LinkWidget, PointModel } from '@projectstorm/react-diagr
 import { RightAngleLinkFactory } from './RightAngleLinkFactory';
 import { DefaultLinkModel, DefaultLinkSegmentWidget } from '@projectstorm/react-diagrams-defaults';
 import { Point } from '@projectstorm/geometry';
-import { MouseEvent } from 'react';
 import { RightAngleLinkModel } from './RightAngleLinkModel';
 
 export interface RightAngleLinkProps {
@@ -21,19 +20,19 @@ export interface RightAngleLinkState {
 }
 
 export class RightAngleLinkWidget extends React.Component<RightAngleLinkProps, RightAngleLinkState> {
-	public static defaultProps: RightAngleLinkProps = {
+	public static defaultProps: Partial<RightAngleLinkProps> = {
 		color: 'red',
 		width: 3,
-		link: null,
+		link: undefined,
 		smooth: false,
-		diagramEngine: null,
-		factory: null
+		diagramEngine: undefined,
+		factory: undefined
 	};
 
 	refPaths: React.RefObject<SVGPathElement>[];
 
 	// DOM references to the label and paths (if label is given), used to calculate dynamic positioning
-	refLabels: { [id: string]: HTMLElement };
+	refLabels: { [id: string]: HTMLElement } | undefined;
 	dragging_index: number;
 
 	constructor(props: RightAngleLinkProps) {
@@ -50,17 +49,23 @@ export class RightAngleLinkWidget extends React.Component<RightAngleLinkProps, R
 
 	componentDidUpdate(): void {
 		this.props.link.setRenderedPaths(
-			this.refPaths.map((ref) => {
-				return ref.current;
-			})
+			this.refPaths.reduce((acc, ref) => {
+				const current =  ref.current;
+				if(current){ acc.push(current)}
+
+				return acc;
+			}, [] as SVGPathElement[])
 		);
 	}
 
 	componentDidMount(): void {
 		this.props.link.setRenderedPaths(
-			this.refPaths.map((ref) => {
-				return ref.current;
-			})
+			this.refPaths.reduce((acc, ref) => {
+				const current =  ref.current;
+				if(current){ acc.push(current)}
+
+				return acc;
+			}, [] as SVGPathElement[])
 		);
 	}
 
@@ -77,7 +82,7 @@ export class RightAngleLinkWidget extends React.Component<RightAngleLinkProps, R
 				path={path}
 				selected={this.state.selected}
 				diagramEngine={this.props.diagramEngine}
-				factory={this.props.diagramEngine.getFactoryForLink(this.props.link)}
+				factory={this.props.factory}
 				link={this.props.link}
 				forwardRef={ref}
 				onSelection={(selected) => {
@@ -88,7 +93,7 @@ export class RightAngleLinkWidget extends React.Component<RightAngleLinkProps, R
 		);
 	}
 
-	calculatePositions(points: PointModel[], event: MouseEvent, index: number, coordinate: string) {
+	calculatePositions(points: PointModel[], event: MouseEvent, index: number, coordinate: 'x' | 'y') {
 		// If path is first or last add another point to keep node port on its position
 		if (index === 0) {
 			let point = new PointModel({
@@ -173,16 +178,20 @@ export class RightAngleLinkWidget extends React.Component<RightAngleLinkProps, R
 		this.props.link.setFirstAndLastPathsDirection();
 	}
 
-	handleMove = function (event: MouseEvent) {
-		this.draggingEvent(event, this.dragging_index);
-	}.bind(this);
+	 handleMove = function (this: RightAngleLinkWidget) {
+		const self = this;
+		return function (this: Window, ev: MouseEvent)   {
+			self.draggingEvent(ev, self.dragging_index);
+	}}.bind(this)();
 
-	handleUp = function (event: MouseEvent) {
+	 handleUp = function(this: RightAngleLinkWidget) {
+		const self = this;
+		return function (this: Window, ev: MouseEvent) {
 		// Unregister handlers to avoid multiple event handlers for other links
-		this.setState({ canDrag: false, selected: false });
-		window.removeEventListener('mousemove', this.handleMove);
-		window.removeEventListener('mouseup', this.handleUp);
-	}.bind(this);
+		self.setState({ canDrag: false, selected: false });
+		window.removeEventListener('mousemove', self.handleMove);
+		window.removeEventListener('mouseup', self.handleUp);
+	}}.bind(this)();
 
 	render() {
 		//ensure id is present for all points on the path

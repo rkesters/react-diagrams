@@ -8,7 +8,7 @@
 		"url": "https://github.com/projectstorm/react-diagrams.git"
 	},
 	"scripts": {
-		"clean": "rimraf ./dist",
+		"clean": "rimraf ./dist && rimraf tsconfig.tsbuildinfo",
 		"build": "../../node_modules/.bin/webpack"
 	},
 	"publishConfig": {

@@ -10,15 +10,15 @@ import { RightAngleLinkModel } from './RightAngleLinkModel';
 export class RightAngleLinkFactory extends DefaultLinkFactory<RightAngleLinkModel> {
 	static NAME = 'rightAngle';
 
-	constructor() {
-		super(RightAngleLinkFactory.NAME);
+	constructor(engine: DiagramEngine) {
+		super(engine, RightAngleLinkFactory.NAME);
 	}
 
-	generateModel(event): RightAngleLinkModel {
+	generateModel(_event: any): RightAngleLinkModel {
 		return new RightAngleLinkModel();
 	}
 
-	generateReactWidget(event): JSX.Element {
+	generateReactWidget(event: { model: RightAngleLinkModel }): JSX.Element {
 		return <RightAngleLinkWidget diagramEngine={this.engine} link={event.model} factory={this} />;
 	}
 }

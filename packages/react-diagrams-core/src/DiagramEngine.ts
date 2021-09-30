@@ -1,6 +1,6 @@
-import { NodeModel } from './entities/node/NodeModel';
+import { NodeModel, NodeModelGenerics } from './entities/node/NodeModel';
 import { PortModel } from './entities/port/PortModel';
-import { LinkModel } from './entities/link/LinkModel';
+import { LinkModel, LinkModelGenerics } from './entities/link/LinkModel';
 import { LabelModel } from './entities/label/LabelModel';
 import { Point, Rectangle, Polygon } from '@projectstorm/geometry';
 import { MouseEvent } from 'react';
@@ -12,9 +12,12 @@ import {
 	FactoryBank,
 	Toolkit,
 	CanvasEngineListener,
-	CanvasEngineOptions
+	CanvasEngineOptions,
+	BaseModelGenerics,
+	BaseModelListener
 } from '@projectstorm/react-canvas-core';
 import { DiagramModel } from './models/DiagramModel';
+import { isNumber, isObject, isString } from 'lodash';
 
 /**
  * Passed as a parameter to the DiagramWidget
@@ -27,8 +30,8 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 
 	maxNumberPointsPerLink: number;
 
-	constructor(options: CanvasEngineOptions = {}) {
-		super(options);
+	constructor(model: DiagramModel, options: CanvasEngineOptions = {}) {
+		super(model, options);
 		this.maxNumberPointsPerLink = 1000;
 
 		// create banks for the different factory types
@@ -37,14 +40,16 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 		this.portFactories = new FactoryBank();
 		this.labelFactories = new FactoryBank();
 
-		const setup = (factory: FactoryBank) => {
+		const setup = (factory: FactoryBank<any>) => {
 			factory.registerListener({
 				factoryAdded: (event) => {
 					event.factory.setDiagramEngine(this);
 				},
 				factoryRemoved: (event) => {
 					event.factory.setDiagramEngine(null);
-				}
+				},
+				eventDidFire: (): void => {},
+				eventWillFire: (): void => {}
 			});
 		};
 
@@ -55,9 +60,9 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 	}
 
 	/**
-	 * Gets a model and element under the mouse cursor
+	 * Gets a model and element under th`e mouse cursor
 	 */
-	getMouseElement(event: MouseEvent): BaseModel {
+	getMouseElement(event: MouseEvent): BaseModel | undefined | null {
 		var target = event.target as Element;
 		var diagramModel = this.model;
 
@@ -65,25 +70,25 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 		var element = Toolkit.closest(target, '.port[data-name]');
 		if (element) {
 			var nodeElement = Toolkit.closest(target, '.node[data-nodeid]') as HTMLElement;
-			return diagramModel.getNode(nodeElement.getAttribute('data-nodeid')).getPort(element.getAttribute('data-name'));
+			return diagramModel?.getNode(nodeElement.getAttribute('data-nodeid'))?.getPort(element.getAttribute('data-name'));
 		}
 
 		//look for a point
 		element = Toolkit.closest(target, '.point[data-id]');
 		if (element) {
-			return diagramModel.getLink(element.getAttribute('data-linkid')).getPointModel(element.getAttribute('data-id'));
+			return diagramModel?.getLink(element.getAttribute('data-linkid'))?.getPointModel(element.getAttribute('data-id'));
 		}
 
 		//look for a link
 		element = Toolkit.closest(target, '[data-linkid]');
 		if (element) {
-			return diagramModel.getLink(element.getAttribute('data-linkid'));
+			return diagramModel?.getLink(element.getAttribute('data-linkid'));
 		}
 
 		//look for a node
 		element = Toolkit.closest(target, '.node[data-nodeid]');
 		if (element) {
-			return diagramModel.getNode(element.getAttribute('data-nodeid'));
+			return diagramModel?.getNode(element.getAttribute('data-nodeid'));
 		}
 
 		return null;
@@ -108,7 +113,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 	}
 
 	getFactoryForNode<F extends AbstractReactFactory<NodeModel, DiagramEngine>>(node: NodeModel | string) {
-		if (typeof node === 'string') {
+		if (isString(node)) {
 			return this.nodeFactories.getFactory(node);
 		}
 		return this.nodeFactories.getFactory(node.getType());
@@ -143,22 +148,22 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 		return this.getFactoryForNode(node).generateReactWidget({ model: node });
 	}
 
-	getNodeElement(node: NodeModel): Element {
-		const selector = this.canvas.querySelector(`.node[data-nodeid="${node.getID()}"]`);
-		if (selector === null) {
+	getNodeElement(node: NodeModel): Element  {
+		const selector = this.canvas?.querySelector(`.node[data-nodeid="${node.getID()}"]`);
+		if (!selector ) {
 			throw new Error('Cannot find Node element with nodeID: [' + node.getID() + ']');
 		}
 		return selector;
 	}
 
-	getNodePortElement(port: PortModel): any {
-		var selector = this.canvas.querySelector(
-			`.port[data-name="${port.getName()}"][data-nodeid="${port.getParent().getID()}"]`
+	getNodePortElement(port: PortModel): Element | null {
+		var selector = this.canvas?.querySelector(
+			`.port[data-name="${port.getName()}"][data-nodeid="${port.getParent()?.getID()}"]`
 		);
-		if (selector === null) {
+		if (!selector ) {
 			throw new Error(
 				'Cannot find Node Port element with nodeID: [' +
-					port.getParent().getID() +
+					port.getParent()?.getID() +
 					'] and name: [' +
 					port.getName() +
 					']'
@@ -174,19 +179,22 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 	/**
 	 * Calculate rectangular coordinates of the port passed in.
 	 */
-	getPortCoords(port: PortModel, element?: HTMLDivElement): Rectangle {
+	getPortCoords(port: PortModel, element?: HTMLDivElement |undefined | null): Rectangle {
 		if (!this.canvas) {
 			throw new Error('Canvas needs to be set first');
 		}
-		if (!element) {
-			element = this.getNodePortElement(port);
+		const elem = element ?? this.getNodePortElement(port);
+		if (!elem) {
+			throw new Error(
+				'Cannot find Node Port element [' + port.getParent()?.getID() + '] and name: [' + port.getName() + ']'
+			);
 		}
-		const sourceRect = element.getBoundingClientRect();
+		const sourceRect = elem.getBoundingClientRect();
 		const point = this.getRelativeMousePoint({
 			clientX: sourceRect.left,
 			clientY: sourceRect.top
 		});
-		const zoom = this.model.getZoomLevel() / 100.0;
+		const zoom = (this.model?.getZoomLevel() ?? 1)/ 100.0;
 		return new Rectangle(point.x, point.y, sourceRect.width / zoom, sourceRect.height / zoom);
 	}
 
@@ -211,7 +219,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 		};
 	}
 
-	getBoundingNodesRect(nodes: NodeModel[]): Rectangle {
+	getBoundingNodesRect(nodes: NodeModel[]): Rectangle | undefined {
 		if (nodes) {
 			if (nodes.length === 0) {
 				return new Rectangle(0, 0, 0, 0);
@@ -222,8 +230,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 	}
 
 	zoomToFitSelectedNodes(options: { margin?: number; maxZoom?: number }) {
-		const nodes: NodeModel[] = this.model
-			.getSelectedEntities()
+		const nodes: NodeModel[] = this.model?.getSelectedEntities()
 			.filter((entity) => entity instanceof NodeModel) as NodeModel[];
 		this.zoomToFitNodes({
 			margin: options.margin,
@@ -232,34 +239,25 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 		});
 	}
 
-	zoomToFitNodes(options: { margin?: number; nodes?: NodeModel[]; maxZoom?: number });
 	/**
 	 * @deprecated
 	 */
-	zoomToFitNodes(margin: number);
-	zoomToFitNodes(options) {
-		let margin = options || 0;
-		let nodes: NodeModel[] = [];
-		let maxZoom: number | null = null;
-		if (!!options && typeof options == 'object') {
-			margin = options.margin || 0;
-			nodes = options.nodes || [];
-			maxZoom = options.maxZoom || null;
-		}
+	zoomToFitNodes(margin: number): void;
+	zoomToFitNodes(options: { margin?: number; nodes?: NodeModel[] | null; maxZoom?: number }): void;
+	zoomToFitNodes(options: { margin?: number; nodes?: NodeModel[] | null; maxZoom?: number } | number) {
+		const { margin, nodes, maxZoom } = isNumber(options)
+			? { margin: options, nodes: this.model?.getNodes() ?? [], maxZoom: null }
+			: { margin: options.margin ?? 0, nodes: options.nodes ?? (this.model?.getNodes() ?? []), maxZoom: options.maxZoom ?? null };
 
-		// no node selected
-		if (nodes.length === 0) {
-			nodes = this.model.getNodes();
-		}
 		const nodesRect = this.getBoundingNodesRect(nodes);
 		if (nodesRect) {
 			// there is something we should zoom on
-			let canvasRect = this.canvas.getBoundingClientRect();
+			let canvasRect = this.canvas?.getBoundingClientRect();
 
 			const calculate = (margin: number = 0) => {
 				// work out zoom
-				const xFactor = this.canvas.clientWidth / (nodesRect.getWidth() + margin * 2);
-				const yFactor = this.canvas.clientHeight / (nodesRect.getHeight() + margin * 2);
+				const xFactor = (this.canvas?.clientWidth ?? 0) / (nodesRect.getWidth() + margin * 2);
+				const yFactor = (this.canvas?.clientHeight ?? 0) / (nodesRect.getHeight() + margin * 2);
 
 				let zoomFactor = xFactor < yFactor ? xFactor : yFactor;
 				if (maxZoom && zoomFactor > maxZoom) {
@@ -269,12 +267,12 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 				return {
 					zoom: zoomFactor,
 					x:
-						canvasRect.width / 2 -
+						(canvasRect?.width ?? 0)/ 2 -
 						((nodesRect.getWidth() + margin * 2) * zoomFactor) / 2 +
 						margin -
 						nodesRect.getTopLeft().x,
 					y:
-						canvasRect.height / 2 -
+						(canvasRect?.height ?? 0) / 2 -
 						((nodesRect.getHeight() + margin * 2) * zoomFactor) / 2 +
 						margin -
 						nodesRect.getTopLeft().y
@@ -289,8 +287,8 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 			}
 
 			// apply
-			this.model.setZoomLevel(params.zoom * 100);
-			this.model.setOffset(params.x, params.y);
+			this.model?.setZoomLevel(params.zoom * 100);
+			this.model?.setOffset(params.x, params.y);
 			this.repaintCanvas();
 		}
 	}

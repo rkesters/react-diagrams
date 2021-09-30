@@ -7,13 +7,13 @@ import { ListenerHandle, Toolkit } from '@projectstorm/react-canvas-core';
 export interface PortProps {
 	port: PortModel;
 	engine: DiagramEngine;
-	className?;
-	style?;
+	className?: string;
+	style?: Record<string, unknown>;
 }
 
 export class PortWidget extends React.Component<PortProps> {
 	ref: React.RefObject<HTMLDivElement>;
-	engineListenerHandle: ListenerHandle;
+	engineListenerHandle: ListenerHandle | undefined;
 
 	constructor(props: PortProps) {
 		super(props);
@@ -28,7 +28,7 @@ export class PortWidget extends React.Component<PortProps> {
 		this.engineListenerHandle && this.engineListenerHandle.deregister();
 	}
 
-	componentDidUpdate(prevProps: Readonly<PortProps>, prevState, snapshot?: any): void {
+	componentDidUpdate(prevProps: Readonly<PortProps>, prevState:any, snapshot?: any): void {
 		if (!this.props.port.reportedPosition) {
 			this.report();
 		}
@@ -47,7 +47,7 @@ export class PortWidget extends React.Component<PortProps> {
 
 	getExtraProps() {
 		if (Toolkit.TESTING) {
-			const links = _.keys(this.props.port.getNode().getPort(this.props.port.getName()).links).join(',');
+			const links = _.keys(this.props.port.getNode()?.getPort(this.props.port.getName())?.links).join(',');
 			return {
 				'data-links': links
 			};
@@ -62,7 +62,7 @@ export class PortWidget extends React.Component<PortProps> {
 				ref={this.ref}
 				className={`port ${this.props.className || ''}`}
 				data-name={this.props.port.getName()}
-				data-nodeid={this.props.port.getNode().getID()}
+				data-nodeid={this.props.port.getNode()?.getID()}
 				{...this.getExtraProps()}>
 				{this.props.children}
 			</div>

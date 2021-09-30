@@ -13,15 +13,15 @@ export interface LinkProps {
 }
 
 export interface LinkState {
-	sourcePort: PortModel;
-	targetPort: PortModel;
+	sourcePort: PortModel | null;
+	targetPort: PortModel | null;
 }
 
 export class LinkWidget extends React.Component<LinkProps, LinkState> {
-	sourceListener: ListenerHandle;
-	targetListener: ListenerHandle;
+	sourceListener: ListenerHandle | undefined;
+	targetListener: ListenerHandle| undefined;
 
-	constructor(props) {
+	constructor(props:LinkProps ) {
 		super(props);
 		this.state = {
 			sourcePort: null,
@@ -49,7 +49,7 @@ export class LinkWidget extends React.Component<LinkProps, LinkState> {
 		this.targetListener && this.targetListener.deregister();
 
 		if (!this.props.link.getTargetPort()) return;
-		this.targetListener = this.props.link.getTargetPort().registerListener({
+		this.targetListener = this.props.link.getTargetPort()?.registerListener({
 			reportInitialPosition: (event: BaseEntityEvent<BasePositionModel>) => {
 				this.forceUpdate();
 			}
@@ -60,14 +60,14 @@ export class LinkWidget extends React.Component<LinkProps, LinkState> {
 		this.sourceListener && this.sourceListener.deregister();
 
 		if (!this.props.link.getSourcePort()) return;
-		this.sourceListener = this.props.link.getSourcePort().registerListener({
+		this.sourceListener = this.props.link.getSourcePort()?.registerListener({
 			reportInitialPosition: (event: BaseEntityEvent<BasePositionModel>) => {
 				this.forceUpdate();
 			}
 		});
 	}
 
-	componentDidUpdate(prevProps: Readonly<LinkProps>, prevState: Readonly<LinkState>, snapshot) {
+	componentDidUpdate(prevProps: Readonly<LinkProps>, prevState: Readonly<LinkState>, _snapshot: any) {
 		if (prevState.sourcePort !== this.state.sourcePort) {
 			this.installSource();
 		}
@@ -93,10 +93,10 @@ export class LinkWidget extends React.Component<LinkProps, LinkState> {
 		const { link } = this.props;
 
 		// only draw the link when we have reported positions
-		if (link.getSourcePort() && !link.getSourcePort().reportedPosition) {
+		if (link.getSourcePort() && !link.getSourcePort()?.reportedPosition) {
 			return null;
 		}
-		if (link.getTargetPort() && !link.getTargetPort().reportedPosition) {
+		if (link.getTargetPort() && !link.getTargetPort()?.reportedPosition) {
 			return null;
 		}
 

@@ -4,6 +4,7 @@ import { DiagramEngine } from '@projectstorm/react-diagrams-core';
 import { DefaultNodeModel } from './DefaultNodeModel';
 import { DefaultPortLabel } from '../port/DefaultPortLabelWidget';
 import styled from '@emotion/styled';
+import { DefaultPortModel } from '../port/DefaultPortModel';
 
 namespace S {
 	export const Node = styled.div<{ background: string; selected: boolean }>`
@@ -59,7 +60,7 @@ export interface DefaultNodeProps {
  * for both all the input ports on the left, and the output ports on the right.
  */
 export class DefaultNodeWidget extends React.Component<DefaultNodeProps> {
-	generatePort = (port) => {
+	generatePort = (port: DefaultPortModel) => {
 		return <DefaultPortLabel engine={this.props.engine} port={port} key={port.getID()} />;
 	};
 
@@ -68,7 +69,7 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps> {
 			<S.Node
 				data-default-node-name={this.props.node.getOptions().name}
 				selected={this.props.node.isSelected()}
-				background={this.props.node.getOptions().color}>
+				background={this.props.node.getOptions().color ?? 'unset'}>
 				<S.Title>
 					<S.TitleName>{this.props.node.getOptions().name}</S.TitleName>
 				</S.Title>

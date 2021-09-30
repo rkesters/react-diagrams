@@ -1,8 +1,13 @@
+import { get, has, isNumber } from 'lodash';
 import { Matrix } from './Matrix';
 
 export class Point {
 	x: number;
 	y: number;
+
+  static isa(value: unknown): value is Point {
+		return (has(value, 'x') && has(value, 'y')) && (isNumber( get(value, 'x')) && isNumber(get(value, 'y')))
+	}
 
 	constructor(x: number, y: number) {
 		this.x = x;
@@ -68,7 +73,7 @@ export class Point {
 		]);
 	}
 
-	static createScaleMatrix(x, y, origin: Point): Matrix {
+	static createScaleMatrix(x: number, y: number, origin: Point): Matrix {
 		return this.multiply(
 			Point.translateMatrix(origin.x, origin.y),
 			Point.scaleMatrix(x, y),

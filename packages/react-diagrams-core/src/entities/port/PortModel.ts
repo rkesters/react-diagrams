@@ -22,7 +22,7 @@ export interface PortModelListener extends BasePositionModelListener {
 	/**
 	 * fires when it first receives positional information
 	 */
-	reportInitialPosition?: (event: BaseEntityEvent<PortModel>) => void;
+	reportInitialPosition: (event: BaseEntityEvent<PortModel>) => void;
 }
 
 export interface PortModelOptions extends BaseModelOptions {
@@ -49,9 +49,11 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
 		super(options);
 		this.links = {};
 		this.reportedPosition = false;
+		this.width = 0;
+		this.height = 0;
 	}
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<PortModel['serialize']>>) {
 		super.deserialize(event);
 		this.reportedPosition = false;
 		this.options.name = event.data.name;
@@ -63,30 +65,33 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
 			...super.serialize(),
 			name: this.options.name,
 			alignment: this.options.alignment,
-			parentNode: this.parent.getID(),
+			parentNode: this.parent?.getID(),
 			links: _.map(this.links, (link) => {
 				return link.getID();
 			})
 		};
 	}
 
-	setPosition(point: Point);
-	setPosition(x: number, y: number);
-	setPosition(x, y?) {
+	setPosition(point: Point): void;
+	setPosition(x: number, y: number): void;
+	setPosition(x: Point | number, y?: number) {
 		let old = this.position;
-		super.setPosition(x, y);
+		Point.isa(x) ? super.setPosition(x) : super.setPosition(x, y as number) ;
+		const X = this.getPosition().x;
+		const Y = this.getPosition().y;
+
 		_.forEach(this.getLinks(), (link) => {
 			let point = link.getPointForPort(this);
-			point.setPosition(point.getX() + x - old.x, point.getY() + y - old.y);
+			point?.setPosition(point.getX() + X - old.x, point.getY() + Y - old.y);
 		});
 	}
 
-	doClone(lookupTable = {}, clone) {
+	doClone(lookupTable = {}, clone: this) {
 		clone.links = {};
-		clone.parentNode = this.getParent().clone(lookupTable);
+		clone.parent = this.getParent()?.clone(lookupTable);
 	}
 
-	getNode(): NodeModel {
+	getNode(): NodeModel | undefined {
 		return this.getParent();
 	}
 
@@ -94,7 +99,7 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
 		return this.options.name;
 	}
 
-	getMaximumLinks(): number {
+	getMaximumLinks(): number | undefined  {
 		return this.options.maximumLinks;
 	}
 
@@ -119,7 +124,7 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
 			var numberOfLinks: number = _.size(this.links);
 			if (this.options.maximumLinks === 1 && numberOfLinks >= 1) {
 				return _.values(this.links)[0];
-			} else if (numberOfLinks >= this.options.maximumLinks) {
+			} else if (numberOfLinks >= (this.options.maximumLinks ?? Number.MAX_SAFE_INTEGER/2)) {
 				return null;
 			}
 		}
@@ -128,7 +133,7 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
 
 	reportPosition() {
 		_.forEach(this.getLinks(), (link) => {
-			link.getPointForPort(this).setPosition(this.getCenter());
+			link.getPointForPort(this)?.setPosition(this.getCenter());
 		});
 		this.fireEvent(
 			{
@@ -158,7 +163,7 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
 		return true;
 	}
 
-	isLocked() {
-		return super.isLocked() || this.getParent().isLocked();
+	isLocked(): boolean {
+		return super.isLocked() || (this.getParent()?.isLocked() ?? false);
 	}
 }

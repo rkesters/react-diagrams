@@ -4,11 +4,11 @@ import { CanvasEngine } from '../CanvasEngine';
 import { BaseEvent, BaseListener, BaseObserver } from '../core/BaseObserver';
 
 export interface StateMachineListener extends BaseListener {
-	stateChanged?: (event: BaseEvent & { newState: State }) => any;
+	stateChanged: (event: BaseEvent & { newState: State }) => any;
 }
 
 export class StateMachine extends BaseObserver<StateMachineListener> {
-	protected currentState: State;
+	protected currentState: State | undefined;
 	protected stateStack: State[];
 	protected engine: CanvasEngine;
 
@@ -32,7 +32,10 @@ export class StateMachine extends BaseObserver<StateMachineListener> {
 		this.setState(_.last(this.stateStack));
 	}
 
-	setState(state: State) {
+	setState(state: State | undefined) {
+		if (!state) {
+			return;
+		}
 		state.setEngine(this.engine);
 
 		// if no state object, get the initial state
@@ -41,7 +44,7 @@ export class StateMachine extends BaseObserver<StateMachineListener> {
 		}
 		const old = this.currentState;
 		this.currentState = state;
-		if (this.currentState) {
+		if (state && old) {
 			this.currentState.activated(old);
 			this.fireEvent<'stateChanged'>(
 				{

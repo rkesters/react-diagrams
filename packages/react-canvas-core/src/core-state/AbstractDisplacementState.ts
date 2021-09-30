@@ -16,67 +16,89 @@ export abstract class AbstractDisplacementState<E extends CanvasEngine = CanvasE
 	initialXRelative: number;
 	initialYRelative: number;
 
-	constructor(options: StateOptions) {
-		super(options);
+	constructor(engine: E, options: StateOptions) {
+		super(engine, options);
+		this.initialX = 0;
+		this.initialY = 0;
+		this.initialXRelative = 0;
+		this.initialYRelative = 0;
 		this.registerAction(
-			new Action({
-				type: InputType.MOUSE_DOWN,
-				fire: (actionEvent: ActionEvent<React.MouseEvent>) => {
-					const { clientX, clientY } = actionEvent.event;
-					this.handleMoveStart(clientX, clientY);
-				}
-			})
-		);
-		this.registerAction(
-			new Action({
-				type: InputType.MOUSE_MOVE,
-				fire: (actionEvent: ActionEvent<React.MouseEvent>) => {
-					const { event } = actionEvent;
-
-					if (event.buttons === 0) {
-						// If buttons is 0, it means the mouse is not down, the user may have released it
-						// outside of the canvas, then we eject the state
-						this.eject();
-
-						return;
+			new Action(
+				{
+					type: InputType.MOUSE_DOWN,
+					fire: (actionEvent: ActionEvent<React.MouseEvent>) => {
+						const { clientX, clientY } = actionEvent.event;
+						this.handleMoveStart(clientX, clientY);
 					}
+				},
+				engine
+			)
+		);
+		this.registerAction(
+			new Action(
+				{
+					type: InputType.MOUSE_MOVE,
+					fire: (actionEvent: ActionEvent<React.MouseEvent>) => {
+						const { event } = actionEvent;
 
-					const { clientX, clientY } = event;
-					this.handleMove(clientX, clientY, event);
-				}
-			})
+						if (event.buttons === 0) {
+							// If buttons is 0, it means the mouse is not down, the user may have released it
+							// outside of the canvas, then we eject the state
+							this.eject();
+
+							return;
+						}
+
+						const { clientX, clientY } = event;
+						this.handleMove(clientX, clientY, event);
+					}
+				},
+				engine
+			)
 		);
 		this.registerAction(
-			new Action({
-				type: InputType.MOUSE_UP,
-				fire: () => this.handleMoveEnd()
-			})
+			new Action(
+				{
+					type: InputType.MOUSE_UP,
+					fire: () => this.handleMoveEnd()
+				},
+				engine
+			)
 		);
 
 		this.registerAction(
-			new Action({
-				type: InputType.TOUCH_START,
-				fire: (actionEvent: ActionEvent<React.TouchEvent>) => {
-					const { clientX, clientY } = actionEvent.event.touches[0];
-					this.handleMoveStart(clientX, clientY);
-				}
-			})
+			new Action(
+				{
+					type: InputType.TOUCH_START,
+					fire: (actionEvent: ActionEvent<React.TouchEvent>) => {
+						const { clientX, clientY } = actionEvent.event.touches[0];
+						this.handleMoveStart(clientX, clientY);
+					}
+				},
+				engine
+			)
 		);
 		this.registerAction(
-			new Action({
-				type: InputType.TOUCH_MOVE,
-				fire: (actionEvent: ActionEvent<React.TouchEvent>) => {
-					const { event } = actionEvent;
-					const { clientX, clientY } = event.touches[0];
-					this.handleMove(clientX, clientY, event);
-				}
-			})
+			new Action(
+				{
+					type: InputType.TOUCH_MOVE,
+					fire: (actionEvent: ActionEvent<React.TouchEvent>) => {
+						const { event } = actionEvent;
+						const { clientX, clientY } = event.touches[0];
+						this.handleMove(clientX, clientY, event);
+					}
+				},
+				engine
+			)
 		);
 		this.registerAction(
-			new Action({
-				type: InputType.TOUCH_END,
-				fire: () => this.handleMoveEnd()
-			})
+			new Action(
+				{
+					type: InputType.TOUCH_END,
+					fire: () => this.handleMoveEnd()
+				},
+				engine
+			)
 		);
 	}
 
@@ -102,5 +124,5 @@ export abstract class AbstractDisplacementState<E extends CanvasEngine = CanvasE
 		this.eject();
 	}
 
-	abstract fireMouseMoved(event: AbstractDisplacementStateEvent);
+	abstract fireMouseMoved(event: AbstractDisplacementStateEvent): void;
 }

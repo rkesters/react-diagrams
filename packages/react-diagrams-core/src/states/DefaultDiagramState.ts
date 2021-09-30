@@ -17,14 +17,14 @@ export class DefaultDiagramState extends State<DiagramEngine> {
 	dragNewLink: DragNewLinkState;
 	dragItems: DragDiagramItemsState;
 
-	constructor() {
-		super({
+	constructor(engine: DiagramEngine) {
+		super(engine, {
 			name: 'default-diagrams'
 		});
-		this.childStates = [new SelectingState()];
-		this.dragCanvas = new DragCanvasState();
-		this.dragNewLink = new DragNewLinkState();
-		this.dragItems = new DragDiagramItemsState();
+		this.childStates = [new SelectingState(engine)];
+		this.dragCanvas = new DragCanvasState(engine);
+		this.dragNewLink = new DragNewLinkState(engine);
+		this.dragItems = new DragDiagramItemsState(engine);
 
 		// determine what was clicked on
 		this.registerAction(
@@ -46,7 +46,7 @@ export class DefaultDiagramState extends State<DiagramEngine> {
 						this.transitionWithEvent(this.dragItems, event);
 					}
 				}
-			})
+			},engine)
 		);
 
 		// touch drags the canvas
@@ -56,7 +56,7 @@ export class DefaultDiagramState extends State<DiagramEngine> {
 				fire: (event: ActionEvent<TouchEvent>) => {
 					this.transitionWithEvent(this.dragCanvas, event);
 				}
-			})
+			},engine)
 		);
 	}
 }

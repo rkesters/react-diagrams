@@ -2,9 +2,10 @@ import { LayerModel } from '../layer/LayerModel';
 import { FactoryBank } from '../../core/FactoryBank';
 import { AbstractModelFactory } from '../../core/AbstractModelFactory';
 import { BaseModel } from '../../core-models/BaseModel';
+import { IClientRect } from '../../states/SelectionBoxState';
 
 export class SelectionLayerModel extends LayerModel {
-	box: ClientRect;
+	public box: IClientRect | undefined;
 
 	constructor() {
 		super({
@@ -14,11 +15,11 @@ export class SelectionLayerModel extends LayerModel {
 		});
 	}
 
-	setBox(rect: ClientRect) {
+	setBox(rect: IClientRect) {
 		this.box = rect;
 	}
 
-	getChildModelFactoryBank(): FactoryBank<AbstractModelFactory<BaseModel>> {
+	getChildModelFactoryBank(): FactoryBank<AbstractModelFactory<BaseModel>> | null {
 		// is not used as it doesnt serialize
 		return null;
 	}

@@ -1,4 +1,5 @@
 import { WheelEvent } from 'react';
+import { CanvasEngine } from '../CanvasEngine';
 import { Action, ActionEvent, InputType } from '../core-actions/Action';
 
 export interface ZoomCanvasActionOptions {
@@ -6,19 +7,19 @@ export interface ZoomCanvasActionOptions {
 }
 
 export class ZoomCanvasAction extends Action {
-	constructor(options: ZoomCanvasActionOptions = {}) {
+	constructor(options: ZoomCanvasActionOptions = {}, engine: CanvasEngine ) {
 		super({
 			type: InputType.MOUSE_WHEEL,
 			fire: (actionEvent: ActionEvent<WheelEvent>) => {
 				const { event } = actionEvent;
 				// we can block layer rendering because we are only targeting the transforms
-				for (let layer of this.engine.getModel().getLayers()) {
+				for (let layer of (this.engine.getModel()?.getLayers() ?? [])) {
 					layer.allowRepaint(false);
 				}
 
 				const model = this.engine.getModel();
 				event.stopPropagation();
-				const oldZoomFactor = this.engine.getModel().getZoomLevel() / 100;
+				const oldZoomFactor = (this.engine.getModel()?.getZoomLevel() ?? 1) / 100;
 				let scrollDelta = options.inverseZoom ? -event.deltaY : event.deltaY;
 				//check if it is pinch gesture
 				if (event.ctrlKey && scrollDelta % 1 !== 0) {
@@ -31,11 +32,11 @@ export class ZoomCanvasAction extends Action {
 				} else {
 					scrollDelta /= 60;
 				}
-				if (model.getZoomLevel() + scrollDelta > 10) {
-					model.setZoomLevel(model.getZoomLevel() + scrollDelta);
+				if ((model?.getZoomLevel() ?? 1) + scrollDelta > 10) {
+					model?.setZoomLevel(model.getZoomLevel() + scrollDelta);
 				}
 
-				const zoomFactor = model.getZoomLevel() / 100;
+				const zoomFactor = (model?.getZoomLevel() ?? 1) / 100;
 
 				const boundingRect = event.currentTarget.getBoundingClientRect();
 				const clientWidth = boundingRect.width;
@@ -48,17 +49,17 @@ export class ZoomCanvasAction extends Action {
 				const clientY = event.clientY - boundingRect.top;
 
 				// compute width and height increment factor
-				const xFactor = (clientX - model.getOffsetX()) / oldZoomFactor / clientWidth;
-				const yFactor = (clientY - model.getOffsetY()) / oldZoomFactor / clientHeight;
+				const xFactor = (clientX - (model?.getOffsetX() ?? 0)) / oldZoomFactor / clientWidth;
+				const yFactor = (clientY - (model?.getOffsetY() ?? 0)) / oldZoomFactor / clientHeight;
 
-				model.setOffset(model.getOffsetX() - widthDiff * xFactor, model.getOffsetY() - heightDiff * yFactor);
+				model?.setOffset((model?.getOffsetX() ?? 0) - widthDiff * xFactor, (model?.getOffsetY() ?? 0) - heightDiff * yFactor);
 				this.engine.repaintCanvas();
 
 				// re-enable rendering
-				for (let layer of this.engine.getModel().getLayers()) {
+				for (let layer of (this.engine.getModel()?.getLayers() ?? [])) {
 					layer.allowRepaint(true);
 				}
 			}
-		});
+		}, engine);
 	}
 }

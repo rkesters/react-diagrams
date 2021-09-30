@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { DiagramEngine } from '@projectstorm/react-diagrams-core';
+import { DiagramEngine, PortModel, PortModelGenerics } from '@projectstorm/react-diagrams-core';
 import { PathFindingLinkModel } from './PathFindingLinkModel';
 import { PathFindingLinkWidget } from './PathFindingLinkWidget';
 import * as _ from 'lodash';
-import * as Path from 'paths-js/path';
+import  Path from 'paths-js/path';
 import { DefaultLinkFactory } from '@projectstorm/react-diagrams-defaults';
 import {
 	AbstractDisplacementState,
@@ -26,10 +26,10 @@ export class PathFindingLinkFactory extends DefaultLinkFactory<PathFindingLinkMo
 	vAdjustmentFactor: number = 0;
 
 	static NAME = 'pathfinding';
-	listener: ListenerHandle;
+	listener: ListenerHandle | undefined;
 
-	constructor() {
-		super(PathFindingLinkFactory.NAME);
+	constructor(engine: DiagramEngine) {
+		super(engine, PathFindingLinkFactory.NAME);
 	}
 
 	setDiagramEngine(engine: DiagramEngine): void {
@@ -37,6 +37,8 @@ export class PathFindingLinkFactory extends DefaultLinkFactory<PathFindingLinkMo
 
 		// listen for drag changes
 		engine.getStateMachine().registerListener({
+			eventWillFire: () => {},
+			eventDidFire: () => {},
 			stateChanged: (event) => {
 				if (event.newState instanceof AbstractDisplacementState) {
 					const deRegister = engine.getActionEventBus().registerAction(
@@ -47,12 +49,16 @@ export class PathFindingLinkFactory extends DefaultLinkFactory<PathFindingLinkMo
 								engine.repaintCanvas();
 								deRegister();
 							}
-						})
+						}, engine)
 					);
 				}
 			}
 		});
 		this.listener = engine.registerListener({
+			repaintCanvas: () => {},
+			rendered: () => {},
+			eventWillFire: () => {},
+			eventDidFire: () => {},
 			canvasReady: () => {
 				_.defer(() => {
 					this.calculateRoutingMatrix();
@@ -69,11 +75,11 @@ export class PathFindingLinkFactory extends DefaultLinkFactory<PathFindingLinkMo
 		}
 	}
 
-	generateReactWidget(event): JSX.Element {
+	generateReactWidget(event: { model: PathFindingLinkModel }): JSX.Element {
 		return <PathFindingLinkWidget diagramEngine={this.engine} link={event.model} factory={this} />;
 	}
 
-	generateModel(event): PathFindingLinkModel {
+	generateModel(_event: any): PathFindingLinkModel {
 		return new PathFindingLinkModel();
 	}
 
@@ -171,16 +177,16 @@ export class PathFindingLinkFactory extends DefaultLinkFactory<PathFindingLinkMo
 		height: number;
 		vAdjustmentFactor: number;
 	} => {
-		const allNodesCoords = _.values(this.engine.getModel().getNodes()).map((item) => ({
+		const allNodesCoords = _.values(this.engine.getModel()?.getNodes()).map((item) => ({
 			x: item.getX(),
 			width: item.width,
 			y: item.getY(),
 			height: item.height
 		}));
 
-		const allLinks = _.values(this.engine.getModel().getLinks());
+		const allLinks = _.values(this.engine.getModel()?.getLinks());
 		const allPortsCoords = _.flatMap(allLinks.map((link) => [link.getSourcePort(), link.getTargetPort()]))
-			.filter((port) => port !== null)
+			.filter((port): port is PortModel<PortModelGenerics> => port !== null)
 			.map((item) => ({
 				x: item.getX(),
 				width: item.width,
@@ -195,7 +201,7 @@ export class PathFindingLinkFactory extends DefaultLinkFactory<PathFindingLinkMo
 			height: 0
 		}));
 
-		const sumProps = (object, props) => _.reduce(props, (acc, prop) => acc + _.get(object, prop, 0), 0);
+		const sumProps = (object: Record<string, number> | undefined, props: string[]) => _.reduce(props, (acc, prop) => acc + _.get(object, prop, 0), 0);
 
 		const canvas = this.engine.getCanvas() as HTMLDivElement;
 		const concatedCoords = _.concat(allNodesCoords, allPortsCoords, allPointsCoords);
@@ -222,7 +228,7 @@ export class PathFindingLinkFactory extends DefaultLinkFactory<PathFindingLinkMo
 	 * Updates (by reference) where nodes will be drawn on the matrix passed in.
 	 */
 	markNodes = (matrix: number[][]): void => {
-		_.values(this.engine.getModel().getNodes()).forEach((node) => {
+		_.values(this.engine.getModel()?.getNodes()).forEach((node) => {
 			const startX = Math.floor(node.getX() / this.ROUTING_SCALING_FACTOR);
 			const endX = Math.ceil((node.getX() + node.width) / this.ROUTING_SCALING_FACTOR);
 			const startY = Math.floor(node.getY() / this.ROUTING_SCALING_FACTOR);
@@ -241,15 +247,17 @@ export class PathFindingLinkFactory extends DefaultLinkFactory<PathFindingLinkMo
 	 */
 	markPorts = (matrix: number[][]): void => {
 		const allElements = _.flatMap(
-			_.values(this.engine.getModel().getLinks()).map((link) => [].concat(link.getSourcePort(), link.getTargetPort()))
+			_.values(this.engine.getModel()?.getLinks()).map((link) => [link.getSourcePort(), link.getTargetPort()])
 		);
 		allElements
-			.filter((port) => port !== null)
+			.filter<PortModel<PortModelGenerics>>(
+				(port: PortModel<PortModelGenerics> | null): port is PortModel<PortModelGenerics> => port !== null
+			)
 			.forEach((port) => {
-				const startX = Math.floor(port.x / this.ROUTING_SCALING_FACTOR);
-				const endX = Math.ceil((port.x + port.width) / this.ROUTING_SCALING_FACTOR);
-				const startY = Math.floor(port.y / this.ROUTING_SCALING_FACTOR);
-				const endY = Math.ceil((port.y + port.height) / this.ROUTING_SCALING_FACTOR);
+				const startX = Math.floor(port.getPosition().x / this.ROUTING_SCALING_FACTOR);
+				const endX = Math.ceil((port.getPosition().x + port.width) / this.ROUTING_SCALING_FACTOR);
+				const startY = Math.floor(port.getPosition().y / this.ROUTING_SCALING_FACTOR);
+				const endY = Math.ceil((port.getPosition().y + port.height) / this.ROUTING_SCALING_FACTOR);
 
 				for (let x = startX - 1; x <= endX + 1; x++) {
 					for (let y = startY - 1; y < endY + 1; y++) {

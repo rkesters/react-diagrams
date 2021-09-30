@@ -38,12 +38,12 @@ export class RightAngleLinkModel extends DefaultLinkModel {
 		return pointModel;
 	}
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<RightAngleLinkModel['serialize']>>) {
 		super.deserialize(event);
 		this.setFirstAndLastPathsDirection();
 	}
 
-	setManuallyFirstAndLastPathsDirection(first, last) {
+	setManuallyFirstAndLastPathsDirection(first: boolean, last: boolean) {
 		this._firstPathXdirection = first;
 		this._lastPathXdirection = last;
 	}

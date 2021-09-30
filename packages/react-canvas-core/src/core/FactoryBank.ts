@@ -6,12 +6,12 @@ export interface FactoryBankListener<F extends AbstractFactory = AbstractFactory
 	/**
 	 * Factory as added to rhe bank
 	 */
-	factoryAdded?: (event: BaseEvent & { factory: F }) => any;
+	factoryAdded: (event: BaseEvent & { factory: F }) => any;
 
 	/**
 	 * Factory was removed from the bank
 	 */
-	factoryRemoved?: (event: BaseEvent & { factory: F }) => any;
+	factoryRemoved: (event: BaseEvent & { factory: F }) => any;
 }
 
 /**
@@ -38,8 +38,8 @@ export class FactoryBank<
 		}
 	}
 
-	getFactory<T extends F = F>(type: string): T {
-		if (!this.factories[type]) {
+	getFactory<T extends F = F>(type: string | undefined): T {
+		if (!type || !this.factories[type]) {
 			throw new Error(`Cannot find factory with type [${type}]`);
 		}
 		return this.factories[type] as T;

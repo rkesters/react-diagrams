@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { DefaultLinkModel } from './DefaultLinkModel';
-import { DefaultLinkWidget } from './DefaultLinkWidget';
+import { css, keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import { AbstractReactFactory } from '@projectstorm/react-canvas-core';
 import { DiagramEngine } from '@projectstorm/react-diagrams-core';
-import { css, keyframes } from '@emotion/react';
+import * as React from 'react';
+import { DefaultLinkModel } from './DefaultLinkModel';
+import { DefaultLinkWidget } from './DefaultLinkWidget';
 
 namespace S {
 	export const Keyframes = keyframes`
@@ -32,15 +32,15 @@ export class DefaultLinkFactory<Link extends DefaultLinkModel = DefaultLinkModel
 	Link,
 	DiagramEngine
 > {
-	constructor(type = 'default') {
-		super(type);
+	constructor(engine: DiagramEngine , type = 'default') {
+		super(type, engine);
 	}
 
-	generateReactWidget(event): JSX.Element {
+	generateReactWidget(event: {model: DefaultLinkModel}): JSX.Element {
 		return <DefaultLinkWidget link={event.model} diagramEngine={this.engine} />;
 	}
 
-	generateModel(event): Link {
+	generateModel(_event: any): Link {
 		return new DefaultLinkModel() as Link;
 	}
 

@@ -22,7 +22,7 @@ export class DefaultLabelModel extends LabelModel<DefaultLabelModelGenerics> {
 		this.options.label = label;
 	}
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<DefaultLabelModel['serialize']>>) {
 		super.deserialize(event);
 		this.options.label = event.data.label;
 	}

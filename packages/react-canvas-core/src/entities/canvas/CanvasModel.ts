@@ -11,12 +11,12 @@ import { LayerModel } from '../layer/LayerModel';
 import { BaseModel } from '../../core-models/BaseModel';
 import { CanvasEngine } from '../../CanvasEngine';
 
-export interface DiagramListener extends BaseEntityListener {
-	offsetUpdated?(event: BaseEntityEvent<CanvasModel> & { offsetX: number; offsetY: number }): void;
+export interface CanvasListener extends BaseEntityListener {
+	offsetUpdated(event: BaseEntityEvent<CanvasModel> & { offsetX: number; offsetY: number }): void;
 
-	zoomUpdated?(event: BaseEntityEvent<CanvasModel> & { zoom: number }): void;
+	zoomUpdated(event: BaseEntityEvent<CanvasModel> & { zoom: number }): void;
 
-	gridUpdated?(event: BaseEntityEvent<CanvasModel> & { size: number }): void;
+	gridUpdated(event: BaseEntityEvent<CanvasModel> & { size: number }): void;
 }
 
 export interface DiagramModelOptions extends BaseEntityOptions {
@@ -27,7 +27,7 @@ export interface DiagramModelOptions extends BaseEntityOptions {
 }
 
 export interface CanvasModelGenerics extends BaseEntityGenerics {
-	LISTENER: DiagramListener;
+	LISTENER: CanvasListener;
 	OPTIONS: DiagramModelOptions;
 	LAYER: LayerModel;
 }
@@ -53,9 +53,7 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 	}
 
 	getSelectedEntities(): BaseModel[] {
-		return _.filter(this.getSelectionEntities(), (ob) => {
-			return ob.isSelected();
-		});
+		return _.filter(this.getSelectionEntities(), (ob) => ob.isSelected());
 	}
 
 	clearSelection() {
@@ -70,10 +68,15 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 		});
 	}
 
-	addLayer(layer: LayerModel) {
+	addLayer(layer: LayerModel | undefined) {
+		if (!layer) {return;}
 		layer.setParent(this);
 		layer.registerListener({
-			entityRemoved: (event: BaseEntityEvent<BaseModel>): void => {}
+			entityRemoved: (_event: BaseEntityEvent<BaseModel>): void => {},
+			selectionChanged: (): void => {},
+			lockChanged: (): void => {},
+			eventWillFire: (): void => {},
+			eventDidFire: (): void => {}
 		});
 		this.layers.push(layer);
 	}
@@ -97,7 +100,7 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 	}
 
 	getGridPosition(pos: number) {
-		if (this.options.gridSize === 0) {
+		if (!this.options.gridSize || this.options.gridSize === 0) {
 			return pos;
 		}
 		return this.options.gridSize * Math.floor((pos + this.options.gridSize / 2) / this.options.gridSize);
@@ -114,8 +117,8 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 			[id: string]: (model: BaseModel) => any;
 		} = {};
 
-		const event: DeserializeEvent = {
-			data: data,
+		const event: DeserializeEvent<ReturnType<CanvasModel['serialize']>> = {
+			data,
 			engine: engine,
 			registerModel: (model: BaseModel) => {
 				models[model.getID()] = model;
@@ -123,7 +126,7 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 					resolvers[model.getID()](model);
 				}
 			},
-			getModel<T extends BaseModel>(id: string): Promise<T> {
+			getModel<T extends BaseModel >(id: string): Promise<T | null> {
 				if (models[id]) {
 					return Promise.resolve(models[id]) as Promise<T>;
 				}
@@ -138,17 +141,17 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 		this.deserialize(event);
 	}
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<CanvasModel['serialize']>>) {
 		super.deserialize(event);
 		this.options.offsetX = event.data.offsetX;
 		this.options.offsetY = event.data.offsetY;
 		this.options.zoom = event.data.zoom;
 		this.options.gridSize = event.data.gridSize;
 		_.forEach(event.data.layers, (layer) => {
-			const layerOb = event.engine.getFactoryForLayer(layer.type).generateModel({
+			const layerOb = event.engine.getFactoryForLayer(layer.type)?.generateModel({
 				initialConfig: layer
 			});
-			layerOb.deserialize({
+			layerOb?.deserialize({
 				...event,
 				data: layer
 			});
@@ -181,22 +184,22 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 	}
 
 	setOffsetX(offsetX: number) {
-		this.setOffset(offsetX, this.options.offsetY);
+		this.setOffset(offsetX, this.getOffsetY());
 	}
 
 	setOffsetY(offsetY: number) {
-		this.setOffset(this.options.offsetX, offsetY);
+		this.setOffset(this.getOffsetX(), offsetY);
 	}
 
 	getOffsetY() {
-		return this.options.offsetY;
+		return this.options.offsetY ?? 0;
 	}
 
 	getOffsetX() {
-		return this.options.offsetX;
+		return this.options.offsetX ?? 0;
 	}
 
 	getZoomLevel() {
-		return this.options.zoom;
+		return this.options.zoom ?? 1;
 	}
 }

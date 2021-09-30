@@ -1,16 +1,18 @@
-import { Toolkit } from '../Toolkit';
 import * as _ from 'lodash';
 import { CanvasEngine } from '../CanvasEngine';
-import { BaseEvent, BaseListener, BaseObserver } from '../core/BaseObserver';
-import { AbstractModelFactory } from '../core/AbstractModelFactory';
+import { BaseEvent, BaseListener, BaseObserver, ParameterFirst } from '../core/BaseObserver';
+import { Toolkit } from '../Toolkit';
 import { BaseModel } from './BaseModel';
 
 export interface BaseEntityEvent<T extends BaseEntity = BaseEntity> extends BaseEvent {
-	entity: T;
+	entity?: T;
 }
 
-export interface BaseEntityListener<T extends BaseEntity = BaseEntity> extends BaseListener {
-	lockChanged?(event: BaseEntityEvent<T> & { locked: boolean }): void;
+export interface LockChangedEvent<T extends BaseEntity = BaseEntity> extends BaseEntityEvent<T>  {
+	locked: boolean;
+}
+export interface BaseEntityListener extends BaseListener {
+	lockChanged(event: LockChangedEvent ): void;
 }
 
 export type BaseEntityType = 'node' | 'link' | 'port' | 'point';
@@ -25,40 +27,44 @@ export type BaseEntityGenerics = {
 	OPTIONS: BaseEntityOptions;
 };
 
-export interface DeserializeEvent<T extends BaseEntity = BaseEntity> {
+export interface DeserializeEvent<S = ReturnType<BaseEntity['serialize']>> {
 	engine: CanvasEngine;
-	data: ReturnType<T['serialize']>;
-	registerModel(model: BaseModel);
-	getModel<T extends BaseModel>(id: string): Promise<T>;
+	data: S;
+	registerModel(model: BaseModel): void;
+	getModel<T extends BaseModel>(id: string | null): Promise<T | null>;
 }
 
+type ff<T extends BaseEntityGenerics = BaseEntityGenerics> = ParameterFirst<T['LISTENER']['lockChanged'], BaseEvent>
+const FF: ff = {locked: false, entity: {} as BaseEntity} ;
 export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> extends BaseObserver<T['LISTENER']> {
 	protected options: T['OPTIONS'];
 
+	protected id: string;
 	constructor(options: T['OPTIONS'] = {}) {
 		super();
+		this.id = options.id ?? Toolkit.UID();
 		this.options = {
-			id: Toolkit.UID(),
+			id: this.id,
 			...options
 		};
 	}
 
-	getOptions() {
+	getOptions(): T['OPTIONS'] {
 		return this.options;
 	}
 
-	getID() {
-		return this.options.id;
+	getID(): string {
+		return this.id;
 	}
 
-	doClone(lookupTable: { [s: string]: any } = {}, clone: any) {
+	doClone(lookupTable: { [s: string]: any } = {}, clone: any): void {
 		/*noop*/
 	}
 
 	clone(lookupTable: { [s: string]: any } = {}) {
 		// try and use an existing clone first
-		if (lookupTable[this.options.id]) {
-			return lookupTable[this.options.id];
+		if (lookupTable[this.id]) {
+			return lookupTable[this.id];
 		}
 		let clone = _.cloneDeep(this);
 		clone.options = {
@@ -66,7 +72,7 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
 			id: Toolkit.UID()
 		};
 		clone.clearListeners();
-		lookupTable[this.options.id] = clone;
+		lookupTable[this.id] = clone;
 
 		this.doClone(lookupTable, clone);
 		return clone;
@@ -76,7 +82,7 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
 		this.listeners = {};
 	}
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<BaseEntity['serialize']>>) {
 		this.options.id = event.data.id;
 		this.options.locked = event.data.locked;
 	}
@@ -88,26 +94,25 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
 		};
 	}
 
-	fireEvent<L extends Partial<BaseEntityEvent> & object>(event: L, k: keyof T['LISTENER']) {
-		super.fireEvent(
-			{
-				entity: this,
-				...event
-			},
-			k
-		);
-	}
+	// fireEvent<Event extends keyof Methods<L, B>,>( k: keyof T['LISTENER'], event: L) {
+	// 	super.fireEvent(
+	// 		{
+	// 			entity: this,
+	// 			...event
+	// 		},
+	// 		k
+	// 	);
+	// }
 
 	public isLocked(): boolean {
-		return this.options.locked;
+		return this.options.locked ?? false;
 	}
 
 	public setLocked(locked: boolean = true) {
 		this.options.locked = locked;
+
 		this.fireEvent(
-			{
-				locked: locked
-			},
+			{ locked: true },
 			'lockChanged'
 		);
 	}

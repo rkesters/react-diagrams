@@ -13,6 +13,6 @@ export class SmartLayerWidget extends React.Component<SmartLayerWidgetProps> {
 	}
 
 	render() {
-		return this.props.engine.getFactoryForLayer(this.props.layer).generateReactWidget({ model: this.props.layer });
+		return this.props.engine.getFactoryForLayer(this.props.layer)?.generateReactWidget({ model: this.props.layer });
 	}
 }

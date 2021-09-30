@@ -28,10 +28,10 @@ export class PointModel<G extends PointModelGenerics = PointModelGenerics> exten
 	}
 
 	isConnectedToPort(): boolean {
-		return this.parent.getPortForPoint(this) !== null;
+		return !!this.parent?.getPortForPoint(this) ;
 	}
 
-	getLink(): LinkModel {
+	getLink(): LinkModel | undefined {
 		return this.getParent();
 	}
 
@@ -44,6 +44,6 @@ export class PointModel<G extends PointModelGenerics = PointModelGenerics> exten
 	}
 
 	isLocked() {
-		return super.isLocked() || this.getParent().isLocked();
+		return super.isLocked() || !!this.getParent()?.isLocked();
 	}
 }

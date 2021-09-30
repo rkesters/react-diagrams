@@ -2,6 +2,7 @@ import * as React from 'react';
 import { DiagramEngine } from '../../DiagramEngine';
 import { LabelModel } from './LabelModel';
 import styled from '@emotion/styled';
+import { get } from 'lodash';
 
 export interface LabelWidgetProps {
 	engine: DiagramEngine;
@@ -37,22 +38,26 @@ export class LabelWidget extends React.Component<LabelWidgetProps> {
 		window.requestAnimationFrame(this.calculateLabelPosition);
 	}
 
-	findPathAndRelativePositionToRenderLabel = (index: number): { path: SVGPathElement; position: number } => {
+	findPathAndRelativePositionToRenderLabel = (index: number): { path: SVGPathElement; position: number } | undefined => {
 		// an array to hold all path lengths, making sure we hit the DOM only once to fetch this information
 		const link = this.props.label.getParent();
-		const lengths = link.getRenderedPath().map((path) => path.getTotalLength());
+		const paths =link?.getRenderedPath();
+		if (!link || !paths) {
+			throw new Error(`Failed to findPathAndRelativePositionToRenderLabel for index ${index}`);
+		}
+		const lengths = paths.map((path) => path.getTotalLength()) ?? [];
 
 		// calculate the point where we want to display the label
 		let labelPosition =
-			lengths.reduce((previousValue, currentValue) => previousValue + currentValue, 0) *
+			lengths?.reduce((previousValue, currentValue) => previousValue + currentValue, 0) *
 			(index / (link.getLabels().length + 1));
 
 		// find the path where the label will be rendered and calculate the relative position
 		let pathIndex = 0;
-		while (pathIndex < link.getRenderedPath().length) {
+		while (pathIndex < paths.length) {
 			if (labelPosition - lengths[pathIndex] < 0) {
 				return {
-					path: link.getRenderedPath()[pathIndex],
+					path: paths[pathIndex],
 					position: labelPosition
 				};
 			}
@@ -64,6 +69,9 @@ export class LabelWidget extends React.Component<LabelWidgetProps> {
 	};
 
 	calculateLabelPosition = () => {
+		if (!this.ref.current) {
+			return;
+		}
 		const found = this.findPathAndRelativePositionToRenderLabel(this.props.index + 1);
 		if (!found) {
 			return;
@@ -72,15 +80,15 @@ export class LabelWidget extends React.Component<LabelWidgetProps> {
 		const { path, position } = found;
 
 		const labelDimensions = {
-			width: this.ref.current.offsetWidth,
-			height: this.ref.current.offsetHeight
+			width: this.ref.current.offsetWidth ?? 0,
+			height: this.ref.current.offsetHeight ?? 0
 		};
 
 		const pathCentre = path.getPointAtLength(position);
 
 		const labelCoordinates = {
-			x: pathCentre.x - labelDimensions.width / 2 + this.props.label.getOptions().offsetX,
-			y: pathCentre.y - labelDimensions.height / 2 + this.props.label.getOptions().offsetY
+			x: pathCentre.x - labelDimensions.width / 2 + get(this.props.label.getOptions(), 'offsetX', 0),
+			y: pathCentre.y - labelDimensions.height / 2 + get(this.props.label.getOptions(), 'offsetY', 0)
 		};
 
 		this.ref.current.style.transform = `translate(${labelCoordinates.x}px, ${labelCoordinates.y}px)`;

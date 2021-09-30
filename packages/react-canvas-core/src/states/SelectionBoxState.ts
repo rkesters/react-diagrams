@@ -4,19 +4,33 @@ import { State } from '../core-state/State';
 import { SelectionLayerModel } from '../entities/selection/SelectionLayerModel';
 import { Point, Rectangle } from '@projectstorm/geometry';
 import { ModelGeometryInterface } from '../core/ModelGeometryInterface';
+import { CanvasEngine } from '..';
+
+export interface IClientRect {
+	left: number;
+	top: number;
+	right: number;
+	bottom: number;
+	width: number;
+	height: number;
+}
+
+function isaMouseEvent(value: unknown): value is MouseEvent {
+	return value instanceof MouseEvent
+}
 
 export class SelectionBoxState extends AbstractDisplacementState {
-	layer: SelectionLayerModel;
+	layer: SelectionLayerModel ;
 
-	constructor() {
-		super({
+	constructor(engine: CanvasEngine) {
+		super(engine, {
 			name: 'selection-box'
 		});
+		this.layer = new SelectionLayerModel();
 	}
 
 	activated(previous: State) {
 		super.activated(previous);
-		this.layer = new SelectionLayerModel();
 		this.engine.getModel().addLayer(this.layer);
 	}
 
@@ -24,16 +38,15 @@ export class SelectionBoxState extends AbstractDisplacementState {
 		super.deactivated(next);
 		this.layer.remove();
 		this.engine.repaintCanvas();
+		this.layer = new SelectionLayerModel();
 	}
 
-	getBoxDimensions(event: AbstractDisplacementStateEvent): ClientRect {
-		let rel: Point;
-		if (event.event instanceof MouseEvent) {
-			rel = this.engine.getRelativePoint(event.event.clientX, event.event.clientY);
-		} else if (event.event instanceof TouchEvent) {
-			const touch = event.event.touches[0];
-			rel = this.engine.getRelativePoint(touch.clientX, touch.clientY);
-		}
+	getBoxDimensions(stateEvent: AbstractDisplacementStateEvent): IClientRect {
+		const event = stateEvent.event;
+
+		const rel: Point = isaMouseEvent(event)  ? this.engine.getRelativePoint(event.clientX, event.clientY) :
+		this.engine.getRelativePoint(event.touches[0].clientX, event.touches[0].clientY);
+
 
 		return {
 			left: rel.x > this.initialXRelative ? this.initialXRelative : rel.x,

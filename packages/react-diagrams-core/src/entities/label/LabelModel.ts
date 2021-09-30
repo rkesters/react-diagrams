@@ -21,7 +21,7 @@ export class LabelModel<G extends LabelModelGenerics = LabelModelGenerics> exten
 		});
 	}
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<LabelModel['serialize']>>) {
 		super.deserialize(event);
 		this.options.offsetX = event.data.offsetX;
 		this.options.offsetY = event.data.offsetY;

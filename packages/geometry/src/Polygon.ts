@@ -21,7 +21,7 @@ export class Polygon {
 		});
 	}
 
-	scale(x, y, origin: Point) {
+	scale(x: number, y: number, origin: Point) {
 		let matrix = Point.createScaleMatrix(x, y, origin);
 		_.forEach(this.points, (point) => {
 			point.transform(matrix);
@@ -66,7 +66,7 @@ export class Polygon {
 
 	getOrigin(): Point {
 		if (this.points.length === 0) {
-			return null;
+			throw new Error(`Unable to get origin for Polygon without points`);
 		}
 		let dimensions = this.getBoundingBox();
 		return Point.middlePoint(dimensions.getTopLeft(), dimensions.getBottomRight());

@@ -37,7 +37,7 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
 		});
 	}
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<DefaultPortModel['serialize']>>) {
 		super.deserialize(event);
 		this.options.in = event.data.in;
 		this.options.label = event.data.label;

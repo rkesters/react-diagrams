@@ -13,10 +13,11 @@ export class MoveItemsState<E extends CanvasEngine = CanvasEngine> extends Abstr
 		};
 	};
 
-	constructor() {
-		super({
+	constructor(engine: E) {
+		super(engine, {
 			name: 'move-items'
 		});
+		this.initialPositions = {};
 		this.registerAction(
 			new Action({
 				type: InputType.MOUSE_DOWN,
@@ -31,7 +32,7 @@ export class MoveItemsState<E extends CanvasEngine = CanvasEngine> extends Abstr
 					element.setSelected(true);
 					this.engine.repaintCanvas();
 				}
-			})
+			}, engine)
 		);
 	}
 

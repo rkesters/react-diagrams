@@ -1,6 +1,7 @@
 import { Action, ActionEvent, InputType } from '../core-actions/Action';
 import { KeyboardEvent } from 'react';
 import * as _ from 'lodash';
+import { CanvasEngine } from '..';
 
 export interface DeleteItemsActionOptions {
 	keyCodes?: number[];
@@ -16,7 +17,7 @@ export interface DeleteItemsActionOptions {
  * Deletes all selected items
  */
 export class DeleteItemsAction extends Action {
-	constructor(options: DeleteItemsActionOptions = {}) {
+	constructor(options: DeleteItemsActionOptions = {}, engine: CanvasEngine) {
 		const keyCodes = options.keyCodes || [46, 8];
 		const modifiers = {
 			ctrlKey: false,
@@ -32,7 +33,7 @@ export class DeleteItemsAction extends Action {
 				const { keyCode, ctrlKey, shiftKey, altKey, metaKey } = event.event;
 
 				if (keyCodes.indexOf(keyCode) !== -1 && _.isEqual({ ctrlKey, shiftKey, altKey, metaKey }, modifiers)) {
-					_.forEach(this.engine.getModel().getSelectedEntities(), (model) => {
+					_.forEach(this.engine.getModel()?.getSelectedEntities(), (model) => {
 						// only delete items which are not locked
 						if (!model.isLocked()) {
 							model.remove();
@@ -41,6 +42,6 @@ export class DeleteItemsAction extends Action {
 					this.engine.repaintCanvas();
 				}
 			}
-		});
+		}, engine);
 	}
 }

@@ -59,10 +59,10 @@ export class CanvasWidget extends React.Component<DiagramProps> {
 			}
 		});
 
-		this.keyDown = (event) => {
+		this.keyDown = (event: React.SyntheticEvent) => {
 			this.props.engine.getActionEventBus().fireAction({ event });
 		};
-		this.keyUp = (event) => {
+		this.keyUp = (event: React.SyntheticEvent) => {
 			this.props.engine.getActionEventBus().fireAction({ event });
 		};
 

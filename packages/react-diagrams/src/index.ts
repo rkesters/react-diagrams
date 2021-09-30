@@ -1,6 +1,7 @@
 import {
 	DefaultDiagramState,
 	DiagramEngine,
+	DiagramModel,
 	LinkLayerFactory,
 	NodeLayerFactory
 } from '@projectstorm/react-diagrams-core';
@@ -20,21 +21,21 @@ export * from '@projectstorm/react-diagrams-routing';
 /**
  * Construct an engine with the defaults installed
  */
-export default (options: CanvasEngineOptions = {}): DiagramEngine => {
-	const engine = new DiagramEngine(options);
+export default (model: DiagramModel, options: CanvasEngineOptions = {}): DiagramEngine => {
+	const engine = new DiagramEngine(model,options);
 
 	// register model factories
-	engine.getLayerFactories().registerFactory(new NodeLayerFactory());
-	engine.getLayerFactories().registerFactory(new LinkLayerFactory());
-	engine.getLayerFactories().registerFactory(new SelectionBoxLayerFactory());
+	engine.getLayerFactories().registerFactory(new NodeLayerFactory(engine));
+	engine.getLayerFactories().registerFactory(new LinkLayerFactory(engine));
+	engine.getLayerFactories().registerFactory(new SelectionBoxLayerFactory(engine));
 
-	engine.getLabelFactories().registerFactory(new DefaultLabelFactory());
-	engine.getNodeFactories().registerFactory(new DefaultNodeFactory()); // i cant figure out why
-	engine.getLinkFactories().registerFactory(new DefaultLinkFactory());
-	engine.getLinkFactories().registerFactory(new PathFindingLinkFactory());
-	engine.getPortFactories().registerFactory(new DefaultPortFactory());
+	engine.getLabelFactories().registerFactory(new DefaultLabelFactory(engine));
+	engine.getNodeFactories().registerFactory(new DefaultNodeFactory(engine)); // i cant figure out why
+	engine.getLinkFactories().registerFactory(new DefaultLinkFactory(engine));
+	engine.getLinkFactories().registerFactory(new PathFindingLinkFactory(engine));
+	engine.getPortFactories().registerFactory(new DefaultPortFactory(engine));
 
 	// register the default interaction behaviours
-	engine.getStateMachine().pushState(new DefaultDiagramState());
+	engine.getStateMachine().pushState(new DefaultDiagramState(engine));
 	return engine;
 };

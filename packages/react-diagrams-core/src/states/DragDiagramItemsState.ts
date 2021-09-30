@@ -7,8 +7,8 @@ import { MouseEvent } from 'react';
 import { LinkModel } from '../entities/link/LinkModel';
 
 export class DragDiagramItemsState extends MoveItemsState<DiagramEngine> {
-	constructor() {
-		super();
+	constructor(engine: DiagramEngine) {
+		super(engine);
 		this.registerAction(
 			new Action({
 				type: InputType.MOUSE_UP,
@@ -23,7 +23,7 @@ export class DragDiagramItemsState extends MoveItemsState<DiagramEngine> {
 								if (link.getLastPoint() !== position.item) {
 									return;
 								}
-								if (link.getSourcePort().canLinkToPort(item)) {
+								if (link.getSourcePort()?.canLinkToPort(item)) {
 									link.setTargetPort(item);
 									item.reportPosition();
 									this.engine.repaintCanvas();
@@ -32,7 +32,7 @@ export class DragDiagramItemsState extends MoveItemsState<DiagramEngine> {
 						});
 					}
 				}
-			})
+			}, engine)
 		);
 	}
 }

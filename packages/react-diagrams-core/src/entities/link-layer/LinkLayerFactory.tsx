@@ -5,8 +5,8 @@ import { LinkLayerModel } from './LinkLayerModel';
 import { LinkLayerWidget } from './LinkLayerWidget';
 
 export class LinkLayerFactory extends AbstractReactFactory<LinkLayerModel, DiagramEngine> {
-	constructor() {
-		super('diagram-links');
+	constructor(engine: DiagramEngine) {
+		super('diagram-links', engine);
 	}
 
 	generateModel(event: GenerateModelEvent): LinkLayerModel {

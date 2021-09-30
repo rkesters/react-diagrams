@@ -4,6 +4,7 @@ import { DefaultLinkModel } from './DefaultLinkModel';
 import { DefaultLinkPointWidget } from './DefaultLinkPointWidget';
 import { DefaultLinkSegmentWidget } from './DefaultLinkSegmentWidget';
 import { MouseEvent } from 'react';
+import { DefaultLinkFactory } from './DefaultLinkFactory';
 
 export interface DefaultLinkProps {
 	link: DefaultLinkModel;
@@ -34,17 +35,17 @@ export class DefaultLinkWidget extends React.Component<DefaultLinkProps, Default
 
 	componentDidUpdate(): void {
 		this.props.link.setRenderedPaths(
-			this.refPaths.map((ref) => {
-				return ref.current;
-			})
+			this.refPaths.reduce((acc, ref) => {
+				return ref.current ? [...acc, ref.current] : acc;
+			}, [] as SVGPathElement[])
 		);
 	}
 
 	componentDidMount(): void {
 		this.props.link.setRenderedPaths(
-			this.refPaths.map((ref) => {
-				return ref.current;
-			})
+			this.refPaths.reduce((acc, ref) => {
+				return ref.current ? [...acc, ref.current] : acc;
+			}, [] as SVGPathElement[])
 		);
 	}
 
@@ -79,7 +80,7 @@ export class DefaultLinkWidget extends React.Component<DefaultLinkProps, Default
 			<DefaultLinkPointWidget
 				key={point.getID()}
 				point={point as any}
-				colorSelected={this.props.link.getOptions().selectedColor}
+				colorSelected={this.props.link.getOptions().selectedColor }
 				color={this.props.link.getOptions().color}
 			/>
 		);
@@ -94,7 +95,7 @@ export class DefaultLinkWidget extends React.Component<DefaultLinkProps, Default
 				path={path}
 				selected={this.state.selected}
 				diagramEngine={this.props.diagramEngine}
-				factory={this.props.diagramEngine.getFactoryForLink(this.props.link)}
+				factory={this.props.diagramEngine.getFactoryForLink<DefaultLinkFactory>(this.props.link)}
 				link={this.props.link}
 				forwardRef={ref}
 				onSelection={(selected) => {
@@ -114,9 +115,9 @@ export class DefaultLinkWidget extends React.Component<DefaultLinkProps, Default
 		if (points.length === 2) {
 			paths.push(
 				this.generateLink(
-					this.props.link.getSVGPath(),
+					this.props.link.getSVGPath() ?? '',
 					{
-						onMouseDown: (event) => {
+						onMouseDown: (event: MouseEvent) => {
 							this.props.selected?.(event);
 							this.addPointToLink(event, 1);
 						}

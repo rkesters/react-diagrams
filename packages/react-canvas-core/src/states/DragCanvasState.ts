@@ -1,3 +1,4 @@
+import { CanvasEngine } from '..';
 import { AbstractDisplacementState, AbstractDisplacementStateEvent } from '../core-state/AbstractDisplacementState';
 import { State } from '../core-state/State';
 
@@ -10,21 +11,23 @@ export interface DragCanvasStateOptions {
 
 export class DragCanvasState extends AbstractDisplacementState {
 	// store this as we drag the canvas
-	initialCanvasX: number;
-	initialCanvasY: number;
+	initialCanvasX: number ;
+	initialCanvasY: number ;
 	config: DragCanvasStateOptions;
 
-	constructor(options: DragCanvasStateOptions = {}) {
-		super({
+	constructor(engine: CanvasEngine, options: DragCanvasStateOptions = {}) {
+		super(engine,{
 			name: 'drag-canvas'
 		});
 		this.config = {
 			allowDrag: true,
 			...options
 		};
+		this.initialCanvasX = 0;
+		this.initialCanvasY= 0;
 	}
 
-	async activated(prev) {
+	async activated(prev: DragCanvasState) {
 		super.activated(prev);
 		this.engine.getModel().clearSelection();
 		await this.engine.repaintCanvas(true);
@@ -34,8 +37,8 @@ export class DragCanvasState extends AbstractDisplacementState {
 			layer.allowRepaint(false);
 		}
 
-		this.initialCanvasX = this.engine.getModel().getOffsetX();
-		this.initialCanvasY = this.engine.getModel().getOffsetY();
+		this.initialCanvasX = this.engine.getModel().getOffsetX() ?? 0;
+		this.initialCanvasY = this.engine.getModel().getOffsetY() ?? 0;
 	}
 
 	deactivated(next: State) {

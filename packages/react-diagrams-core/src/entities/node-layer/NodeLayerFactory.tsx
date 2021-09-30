@@ -5,8 +5,8 @@ import { NodeLayerModel } from './NodeLayerModel';
 import { NodeLayerWidget } from './NodeLayerWidget';
 
 export class NodeLayerFactory extends AbstractReactFactory<NodeLayerModel, DiagramEngine> {
-	constructor() {
-		super('diagram-nodes');
+	constructor(engine: DiagramEngine) {
+		super('diagram-nodes', engine);
 	}
 
 	generateModel(event: GenerateModelEvent): NodeLayerModel {

@@ -4,7 +4,7 @@ import { Point, Rectangle } from '@projectstorm/geometry';
 import { ModelGeometryInterface } from '../core/ModelGeometryInterface';
 
 export interface BasePositionModelListener extends BaseModelListener {
-	positionChanged?(event: BaseEntityEvent<BasePositionModel>): void;
+	positionChanged(event: BaseEntityEvent<BasePositionModel>): void;
 }
 
 export interface BasePositionModelOptions extends BaseModelOptions {
@@ -27,14 +27,10 @@ export class BasePositionModel<G extends BasePositionModelGenerics = BasePositio
 		this.position = options.position || new Point(0, 0);
 	}
 
-	setPosition(point: Point);
-	setPosition(x: number, y: number);
-	setPosition(x, y?) {
-		if (typeof x === 'object') {
-			this.position = x;
-		} else if (typeof x) {
-			this.position = new Point(x, y);
-		}
+	setPosition(point: Point): void;
+	setPosition(x: number, y: number): void;
+	setPosition(x: Point | number , y?: number | undefined ) {
+		this.position = Point.isa(x) ? x : new Point(x,y as number);
 		this.fireEvent({}, 'positionChanged');
 	}
 
@@ -42,7 +38,7 @@ export class BasePositionModel<G extends BasePositionModelGenerics = BasePositio
 		return new Rectangle(this.position, 0, 0);
 	}
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<BasePositionModel['serialize']>>) {
 		super.deserialize(event);
 		this.position = new Point(event.data.x, event.data.y);
 	}
@@ -59,7 +55,7 @@ export class BasePositionModel<G extends BasePositionModelGenerics = BasePositio
 		return this.position;
 	}
 
-	getX() {
+	getX(): number {
 		return this.position.x;
 	}
 

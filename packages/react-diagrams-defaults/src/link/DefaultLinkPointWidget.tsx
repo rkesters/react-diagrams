@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 export interface DefaultLinkPointWidgetProps {
 	point: PointModel;
 	color?: string;
-	colorSelected: string;
+	colorSelected?: string;
 }
 
 export interface DefaultLinkPointWidgetState {
@@ -19,7 +19,7 @@ namespace S {
 }
 
 export class DefaultLinkPointWidget extends React.Component<DefaultLinkPointWidgetProps, DefaultLinkPointWidgetState> {
-	constructor(props) {
+	constructor(props: DefaultLinkPointWidgetProps) {
 		super(props);
 		this.state = {
 			selected: false
@@ -45,7 +45,7 @@ export class DefaultLinkPointWidget extends React.Component<DefaultLinkPointWidg
 						this.setState({ selected: true });
 					}}
 					data-id={point.getID()}
-					data-linkid={point.getLink().getID()}
+					data-linkid={point.getLink()?.getID()}
 					cx={point.getPosition().x}
 					cy={point.getPosition().y}
 					r={15}

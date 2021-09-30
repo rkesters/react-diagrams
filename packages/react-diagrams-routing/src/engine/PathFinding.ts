@@ -8,7 +8,7 @@ is individually represented. Using the factor below, we combine values in order
 to achieve the best trade-off between accuracy and performance.
 */
 
-const pathFinderInstance = new PF.JumpPointFinder({
+const pathFinderInstance =  PF.JumpPointFinder({
 	heuristic: PF.Heuristic.manhattan,
 	diagonalMovement: PF.DiagonalMovement.Never
 });
@@ -58,7 +58,7 @@ export class PathFinding {
 		};
 		pathToStart: number[][];
 		pathToEnd: number[][];
-	} {
+	} | undefined {
 		const startIndex = path.findIndex((point) => {
 			if (matrix[point[1]]) return matrix[point[1]][point[0]] === 0;
 			else return false;

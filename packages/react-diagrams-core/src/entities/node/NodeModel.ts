@@ -13,7 +13,7 @@ import {
 import { DiagramEngine } from '../../DiagramEngine';
 
 export interface NodeModelListener extends BaseModelListener {
-	positionChanged?(event: BaseEntityEvent<NodeModel>): void;
+	positionChanged(event: BaseEntityEvent<NodeModel>): void;
 }
 
 export interface NodeModelGenerics extends BasePositionModelGenerics {
@@ -39,19 +39,20 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 		return new Rectangle(this.getPosition(), this.width, this.height);
 	}
 
-	setPosition(point: Point);
-	setPosition(x: number, y: number);
-	setPosition(x, y?) {
+	setPosition(point: Point): void;
+	setPosition(x: number, y: number): void;
+	setPosition(x: Point | number, y?: number): void {
 		let old = this.position;
-		super.setPosition(x, y);
-
+		Point.isa(x) ? super.setPosition(x) : super.setPosition(x, y as number);
+		const X = this.getPosition().x;
+		const Y = this.getPosition().y;
 		//also update the port co-ordinates (for make glorious speed)
 		_.forEach(this.ports, (port) => {
-			port.setPosition(port.getX() + x - old.x, port.getY() + y - old.y);
+			port.setPosition(port.getX() + X - old.x, port.getY() + Y - old.y);
 		});
 	}
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<NodeModel['serialize']>>) {
 		super.deserialize(event);
 
 		//deserialize ports
@@ -76,7 +77,7 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 		};
 	}
 
-	doClone(lookupTable = {}, clone) {
+	doClone(lookupTable = {}, clone: this) {
 		// also clone the ports
 		clone.ports = {};
 		_.forEach(this.ports, (port) => {
@@ -93,7 +94,7 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 		});
 	}
 
-	getPortFromID(id): PortModel | null {
+	getPortFromID(id: string): PortModel | null {
 		for (var i in this.ports) {
 			if (this.ports[i].getID() === id) {
 				return this.ports[i];
@@ -102,7 +103,7 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 		return null;
 	}
 
-	getLink(id: string): LinkModel {
+	getLink(id: string): LinkModel | undefined {
 		for (let portID in this.ports) {
 			const links = this.ports[portID].getLinks();
 			if (links[id]) {
@@ -111,7 +112,8 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 		}
 	}
 
-	getPort(name: string): PortModel | null {
+	getPort(name: string | null | undefined): PortModel | null {
+		if (!name) {return null;}
 		return this.ports[name];
 	}
 
@@ -126,7 +128,7 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 		}
 		//clear the parent node reference
 		if (this.ports[port.getName()]) {
-			this.ports[port.getName()].setParent(null);
+			this.ports[port.getName()].setParent(undefined);
 			delete this.ports[port.getName()];
 		}
 	}

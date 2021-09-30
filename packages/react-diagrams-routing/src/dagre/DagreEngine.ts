@@ -36,11 +36,12 @@ export class DagreEngine {
 		});
 
 		_.forEach(model.getLinks(), (link) => {
-			// set edges
-			if (link.getSourcePort() && link.getTargetPort()) {
+			const sourcePort = link.getSourcePort()?.getNode() ;
+			const targetPort = link.getTargetPort()?.getNode()
+			if (sourcePort && targetPort) {
 				g.setEdge({
-					v: link.getSourcePort().getNode().getID(),
-					w: link.getTargetPort().getNode().getID(),
+					v: sourcePort.getID(),
+					w: targetPort.getID(),
 					name: link.getID()
 				});
 			}
@@ -51,7 +52,7 @@ export class DagreEngine {
 
 		g.nodes().forEach((v) => {
 			const node = g.node(v);
-			model.getNode(v).setPosition(node.x - node.width / 2, node.y - node.height / 2);
+			model.getNode(v)?.setPosition(node.x - node.width / 2, node.y - node.height / 2);
 		});
 
 		// also include links?
@@ -59,6 +60,7 @@ export class DagreEngine {
 			g.edges().forEach((e) => {
 				const edge = g.edge(e);
 				const link = model.getLink(e.name);
+				if (!link) return;
 
 				const points = [link.getFirstPoint()];
 				for (let i = 1; i < edge.points.length - 1; i++) {

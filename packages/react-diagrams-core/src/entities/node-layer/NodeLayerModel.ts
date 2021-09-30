@@ -1,4 +1,4 @@
-import { LayerModel, LayerModelGenerics } from '@projectstorm/react-canvas-core';
+import { FactoryBank, LayerModel, LayerModelGenerics } from '@projectstorm/react-canvas-core';
 import { NodeModel } from '../node/NodeModel';
 import { DiagramEngine } from '../../DiagramEngine';
 import { DiagramModel } from '../../models/DiagramModel';
@@ -24,12 +24,17 @@ export class NodeLayerModel<G extends NodeLayerModelGenerics = NodeLayerModelGen
 		model.registerListener({
 			entityRemoved: () => {
 				(this.getParent() as DiagramModel).removeNode(model);
-			}
+			},
+			positionChanged: () => {},
+			selectionChanged: () => {},
+			lockChanged: () => {},
+			eventWillFire: () => {},
+			eventDidFire: () => {}
 		});
 		super.addModel(model);
 	}
 
-	getChildModelFactoryBank(engine: G['ENGINE']) {
+	getChildModelFactoryBank(engine: G['ENGINE']): FactoryBank<any> {
 		return engine.getNodeFactories();
 	}
 

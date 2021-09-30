@@ -1,10 +1,11 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { DiagramEngine } from '@projectstorm/react-diagrams-core';
+import { DiagramEngine, PointModel, PointModelGenerics } from '@projectstorm/react-diagrams-core';
 import { PathFinding } from '../engine/PathFinding';
 import { PathFindingLinkFactory } from './PathFindingLinkFactory';
 import { PathFindingLinkModel } from './PathFindingLinkModel';
 import { DefaultLinkSegmentWidget } from '@projectstorm/react-diagrams-defaults';
+import { isEmpty } from 'lodash';
 
 export interface PathFindingLinkWidgetProps {
 	color?: string;
@@ -34,17 +35,17 @@ export class PathFindingLinkWidget extends React.Component<PathFindingLinkWidget
 
 	componentDidUpdate(): void {
 		this.props.link.setRenderedPaths(
-			this.refPaths.map((ref) => {
-				return ref.current;
-			})
+			this.refPaths.reduce((acc, ref) => {
+				 return ref.current ? [...acc, ref.current] : acc;
+			}, [] as SVGPathElement[])
 		);
 	}
 
 	componentDidMount(): void {
 		this.props.link.setRenderedPaths(
-			this.refPaths.map((ref) => {
-				return ref.current;
-			})
+			this.refPaths.reduce((acc, ref) => {
+				return ref.current ? [...acc, ref.current] : acc;
+		 }, [] as SVGPathElement[])
 		);
 	}
 
@@ -61,7 +62,7 @@ export class PathFindingLinkWidget extends React.Component<PathFindingLinkWidget
 				path={path}
 				selected={this.state.selected}
 				diagramEngine={this.props.diagramEngine}
-				factory={this.props.diagramEngine.getFactoryForLink(this.props.link)}
+				factory={this.props.factory}
 				link={this.props.link}
 				forwardRef={ref}
 				onSelection={(selected) => {
@@ -75,16 +76,23 @@ export class PathFindingLinkWidget extends React.Component<PathFindingLinkWidget
 	render() {
 		this.refPaths = [];
 		//ensure id is present for all points on the path
-		var points = this.props.link.getPoints();
+		var points: PointModel<PointModelGenerics>[] = this.props.link.getPoints();
 		var paths = [];
 
 		// first step: calculate a direct path between the points being linked
-		const directPathCoords = this.pathFinding.calculateDirectPath(_.first(points), _.last(points));
+		const directPathCoords = isEmpty(points)
+			? undefined
+			: this.pathFinding.calculateDirectPath(
+					_.first(points) as PointModel<PointModelGenerics>,
+					_.last(points) as PointModel<PointModelGenerics>
+			  );
 
 		const routingMatrix = this.props.factory.getRoutingMatrix();
 		// now we need to extract, from the routing matrix, the very first walkable points
 		// so they can be used as origin and destination of the link to be created
-		const smartLink = this.pathFinding.calculateLinkStartEndCoords(routingMatrix, directPathCoords);
+		const smartLink = directPathCoords
+			? this.pathFinding.calculateLinkStartEndCoords(routingMatrix, directPathCoords)
+			: undefined;
 		if (smartLink) {
 			const { start, end, pathToStart, pathToEnd } = smartLink;
 

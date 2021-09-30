@@ -31,17 +31,17 @@ export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGeneri
 	/**
 	 * This is used for deserialization
 	 */
-	abstract getChildModelFactoryBank(engine: G['ENGINE']): FactoryBank<AbstractModelFactory<BaseModel>>;
+	abstract getChildModelFactoryBank(engine: G['ENGINE']): FactoryBank<AbstractModelFactory<BaseModel>> | null;
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<LayerModel['serialize']>>) {
 		super.deserialize(event);
 		this.options.isSvg = !!event.data.isSvg;
 		this.options.transformed = !!event.data.transformed;
 		_.forEach(event.data.models, (model) => {
-			const modelOb = this.getChildModelFactoryBank(event.engine).getFactory(model.type).generateModel({
+			const modelOb = this.getChildModelFactoryBank(event.engine)?.getFactory(model.type).generateModel({
 				initialConfig: model
 			});
-			modelOb.deserialize({
+			modelOb?.deserialize({
 				...event,
 				data: model
 			});
@@ -75,7 +75,8 @@ export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGeneri
 		super.remove();
 	}
 
-	addModel(model: G['CHILDREN']) {
+	addModel(model: G['CHILDREN'] | null | undefined) {
+		if(!model) { return;}
 		model.setParent(this);
 		this.models[model.getID()] = model;
 	}
@@ -90,7 +91,8 @@ export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGeneri
 		return this.models;
 	}
 
-	getModel(id: string) {
+	getModel(id: string | undefined | null) {
+		if(!id) return undefined;
 		return this.models[id];
 	}
 

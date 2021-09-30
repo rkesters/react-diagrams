@@ -14,14 +14,17 @@ export abstract class State<E extends CanvasEngine = CanvasEngine> {
 	protected options: StateOptions;
 	protected childStates: State[];
 
-	private handler1;
-	private handler2;
+	private handler1: () => void;
+	private handler2: () => void;
 
-	constructor(options: StateOptions) {
+	constructor(engine: E, options: StateOptions) {
 		this.actions = [];
 		this.keys = [];
 		this.childStates = [];
 		this.options = options;
+		this.engine = engine;
+		this.handler1 = () => {};
+		this.handler2 = () => {};
 	}
 
 	setEngine(engine: E) {
@@ -90,7 +93,7 @@ export abstract class State<E extends CanvasEngine = CanvasEngine> {
 				fire: () => {
 					this.tryActivateChildState(this.engine.getActionEventBus().getKeys());
 				}
-			})
+			}, this.engine)
 		);
 
 		this.handler2 = this.engine.getActionEventBus().registerAction(
@@ -99,7 +102,7 @@ export abstract class State<E extends CanvasEngine = CanvasEngine> {
 				fire: () => {
 					this.tryActivateParentState(this.engine.getActionEventBus().getKeys());
 				}
-			})
+			}, this.engine)
 		);
 
 		for (let action of this.actions) {

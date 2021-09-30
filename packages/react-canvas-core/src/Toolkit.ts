@@ -1,4 +1,3 @@
-import * as closest from 'closest';
 
 export class Toolkit {
 	static TESTING: boolean = false;
@@ -24,9 +23,6 @@ export class Toolkit {
 	 * Finds the closest element as a polyfill
 	 */
 	public static closest(element: Element, selector: string) {
-		if (document.body.closest) {
 			return element.closest(selector);
-		}
-		return closest(element, selector);
 	}
 }

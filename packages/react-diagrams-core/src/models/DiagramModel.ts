@@ -8,15 +8,17 @@ import {
 	CanvasModel,
 	CanvasModelGenerics,
 	LayerModel,
-	DeserializeEvent
+	DeserializeEvent,
+	CanvasListener
 } from '@projectstorm/react-canvas-core';
 import { NodeLayerModel } from '../entities/node-layer/NodeLayerModel';
 import { LinkLayerModel } from '../entities/link-layer/LinkLayerModel';
+import { reduce } from 'lodash';
 
-export interface DiagramListener extends BaseEntityListener {
-	nodesUpdated?(event: BaseEntityEvent & { node: NodeModel; isCreated: boolean }): void;
+export interface DiagramListener extends CanvasListener {
+	nodesUpdated(event: BaseEntityEvent & { node: NodeModel; isCreated: boolean }): void;
 
-	linksUpdated?(event: BaseEntityEvent & { link: LinkModel; isCreated: boolean }): void;
+	linksUpdated(event: BaseEntityEvent & { link: LinkModel; isCreated: boolean }): void;
 }
 
 export interface DiagramModelGenerics extends CanvasModelGenerics {
@@ -24,8 +26,8 @@ export interface DiagramModelGenerics extends CanvasModelGenerics {
 }
 
 export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics> extends CanvasModel<G> {
-	protected activeNodeLayer: NodeLayerModel;
-	protected activeLinkLayer: LinkLayerModel;
+	protected activeNodeLayer: NodeLayerModel | undefined;
+	protected activeLinkLayer: LinkLayerModel | undefined;
 
 	constructor(options: G['OPTIONS'] = {}) {
 		super(options);
@@ -33,12 +35,12 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 		this.addLayer(new NodeLayerModel());
 	}
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<DiagramModel['serialize']>>) {
 		this.layers = [];
 		super.deserialize(event);
 	}
 
-	addLayer(layer: LayerModel): void {
+	addLayer(layer: LayerModel<any>): void {
 		super.addLayer(layer);
 		if (layer instanceof NodeLayerModel) {
 			this.activeNodeLayer = layer;
@@ -49,9 +51,9 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 	}
 
 	getLinkLayers(): LinkLayerModel[] {
-		return _.filter(this.layers, (layer) => {
-			return layer instanceof LinkLayerModel;
-		}) as LinkLayerModel[];
+		return this.getLayers().filter( (layer): layer is LinkLayerModel => {
+			return LinkLayerModel.isa(layer);
+		}) ;
 	}
 
 	getNodeLayers(): NodeLayerModel[] {
@@ -60,7 +62,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 		}) as NodeLayerModel[];
 	}
 
-	getActiveNodeLayer(): NodeLayerModel {
+	getActiveNodeLayer(): NodeLayerModel | undefined {
 		if (!this.activeNodeLayer) {
 			const layers = this.getNodeLayers();
 			if (layers.length === 0) {
@@ -72,7 +74,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 		return this.activeNodeLayer;
 	}
 
-	getActiveLinkLayer(): LinkLayerModel {
+	getActiveLinkLayer(): LinkLayerModel | undefined {
 		if (!this.activeLinkLayer) {
 			const layers = this.getLinkLayers();
 			if (layers.length === 0) {
@@ -84,7 +86,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 		return this.activeLinkLayer;
 	}
 
-	getNode(node: string): NodeModel {
+	getNode(node: string | null | undefined): NodeModel | undefined {
 		for (const layer of this.getNodeLayers()) {
 			const model = layer.getModel(node);
 			if (model) {
@@ -93,7 +95,8 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 		}
 	}
 
-	getLink(link: string): LinkModel {
+	getLink(link: string | undefined | null): LinkModel | undefined {
+		if (!link) return;
 		for (const layer of this.getLinkLayers()) {
 			const model = layer.getModel(link);
 			if (model) {
@@ -114,7 +117,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 	}
 
 	addLink(link: LinkModel): LinkModel {
-		this.getActiveLinkLayer().addModel(link);
+		this.getActiveLinkLayer()?.addModel(link);
 		this.fireEvent(
 			{
 				link,
@@ -126,7 +129,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 	}
 
 	addNode(node: NodeModel): NodeModel {
-		this.getActiveNodeLayer().addModel(node);
+		this.getActiveNodeLayer()?.addModel(node);
 		this.fireEvent({ node, isCreated: true }, 'nodesUpdated');
 		return node;
 	}

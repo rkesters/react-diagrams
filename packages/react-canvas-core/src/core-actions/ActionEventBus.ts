@@ -28,7 +28,6 @@ export class ActionEventBus {
 	}
 
 	deregisterAction(action: Action) {
-		action.setEngine(null);
 		delete this.actions[action.id];
 	}
 
@@ -38,7 +37,7 @@ export class ActionEventBus {
 		});
 	}
 
-	getModelForEvent(actionEvent: ActionEvent<MouseEvent>): BaseModel {
+	getModelForEvent(actionEvent: ActionEvent<MouseEvent>): BaseModel | null | undefined{
 		if (actionEvent.model) {
 			return actionEvent.model;
 		}

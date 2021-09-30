@@ -9,9 +9,9 @@ import {
 import { CanvasModel } from '../entities/canvas/CanvasModel';
 
 export interface BaseModelListener extends BaseEntityListener {
-	selectionChanged?(event: BaseEntityEvent<BaseModel> & { isSelected: boolean }): void;
+	selectionChanged(event: BaseEntityEvent<BaseModel> & { isSelected: boolean }): void;
 
-	entityRemoved?(event: BaseEntityEvent<BaseModel>): void;
+	entityRemoved(event: BaseEntityEvent<BaseModel>): void;
 }
 
 export interface BaseModelOptions extends BaseEntityOptions {
@@ -27,7 +27,7 @@ export interface BaseModelGenerics extends BaseEntityGenerics {
 }
 
 export class BaseModel<G extends BaseModelGenerics = BaseModelGenerics> extends BaseEntity<G> {
-	protected parent: G['PARENT'];
+	protected parent: G['PARENT'] | undefined;
 
 	constructor(options: G['OPTIONS']) {
 		super(options);
@@ -37,7 +37,7 @@ export class BaseModel<G extends BaseModelGenerics = BaseModelGenerics> extends 
 		return true;
 	}
 
-	getParentCanvasModel(): CanvasModel {
+	getParentCanvasModel(): CanvasModel | null{
 		if (!this.parent) {
 			return null;
 		}
@@ -49,11 +49,11 @@ export class BaseModel<G extends BaseModelGenerics = BaseModelGenerics> extends 
 		return null;
 	}
 
-	getParent(): G['PARENT'] {
+	getParent(): G['PARENT'] | undefined{
 		return this.parent;
 	}
 
-	setParent(parent: G['PARENT']) {
+	setParent(parent: G['PARENT'] | undefined) {
 		this.parent = parent;
 	}
 
@@ -70,18 +70,18 @@ export class BaseModel<G extends BaseModelGenerics = BaseModelGenerics> extends 
 		};
 	}
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<BaseModel['serialize']>>) {
 		super.deserialize(event);
 		this.options.extras = event.data.extras;
 		this.options.selected = event.data.selected;
 	}
 
-	getType(): string {
+	getType(): string | undefined {
 		return this.options.type;
 	}
 
-	isSelected(): boolean {
-		return this.options.selected;
+	isSelected(): boolean  {
+		return !!this.options.selected;
 	}
 
 	isLocked(): boolean {

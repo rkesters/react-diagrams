@@ -12,9 +12,9 @@ import { BezierCurve } from '@projectstorm/geometry';
 import { BaseEntityEvent, BaseModelOptions, DeserializeEvent } from '@projectstorm/react-canvas-core';
 
 export interface DefaultLinkModelListener extends LinkModelListener {
-	colorChanged?(event: BaseEntityEvent<DefaultLinkModel> & { color: null | string }): void;
+	colorChanged(event: BaseEntityEvent<DefaultLinkModel> & { color: null | string }): void;
 
-	widthChanged?(event: BaseEntityEvent<DefaultLinkModel> & { width: 0 | number }): void;
+	widthChanged(event: BaseEntityEvent<DefaultLinkModel> & { width: 0 | number }): void;
 }
 
 export interface DefaultLinkModelOptions extends BaseModelOptions {
@@ -43,18 +43,19 @@ export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
 		});
 	}
 
-	calculateControlOffset(port: PortModel): [number, number] {
+	calculateControlOffset(port: PortModel | null): [number, number] {
+		if (!port ) { return [0,0];}
 		if (port.getOptions().alignment === PortModelAlignment.RIGHT) {
-			return [this.options.curvyness, 0];
+			return [this.options.curvyness ?? 0, 0];
 		} else if (port.getOptions().alignment === PortModelAlignment.LEFT) {
-			return [-this.options.curvyness, 0];
+			return [-(this.options.curvyness ?? 0), 0];
 		} else if (port.getOptions().alignment === PortModelAlignment.TOP) {
-			return [0, -this.options.curvyness];
+			return [0, -(this.options.curvyness ?? 0)];
 		}
-		return [0, this.options.curvyness];
+		return [0, this.options.curvyness ?? 0];
 	}
 
-	getSVGPath(): string {
+	getSVGPath(): string | undefined {
 		if (this.points.length == 2) {
 			const curve = new BezierCurve();
 			curve.setSource(this.getFirstPoint().getPosition());
@@ -83,7 +84,7 @@ export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
 		};
 	}
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<DefaultLinkModel['serialize']>>) {
 		super.deserialize(event);
 		this.options.color = event.data.color;
 		this.options.width = event.data.width;

@@ -15,9 +15,9 @@ import {
 } from '@projectstorm/react-canvas-core';
 
 export interface LinkModelListener extends BaseModelListener {
-	sourcePortChanged?(event: BaseEntityEvent<LinkModel> & { port: null | PortModel }): void;
+	sourcePortChanged(event: BaseEntityEvent<LinkModel> & { port: null | PortModel }): void;
 
-	targetPortChanged?(event: BaseEntityEvent<LinkModel> & { port: null | PortModel }): void;
+	targetPortChanged(event: BaseEntityEvent<LinkModel> & { port: null | PortModel }): void;
 }
 
 export interface LinkModelGenerics extends BaseModelGenerics {
@@ -35,7 +35,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics>
 	protected labels: LabelModel[];
 	protected points: PointModel[];
 
-	protected renderedPaths: SVGPathElement[];
+	protected renderedPaths: SVGPathElement[] | null;
 
 	constructor(options: G['OPTIONS']) {
 		super(options);
@@ -76,7 +76,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics>
 		return super.getSelectionEntities().concat(this.points);
 	}
 
-	deserialize(event: DeserializeEvent<this>) {
+	deserialize(event: DeserializeEvent<ReturnType<LinkModel['serialize']>>) {
 		super.deserialize(event);
 		this.points = _.map(event.data.points || [], (point) => {
 			var p = new PointModel({
@@ -103,31 +103,33 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics>
 		// these happen async, so we use the promises for these (they need to be done like this without the async keyword
 		// because we need the deserailize method to finish for other methods while this happen
 		if (event.data.target) {
-			event.getModel(event.data.targetPort).then((model: PortModel) => {
+			event.getModel<PortModel>(event.data.targetPort).then((model: PortModel | null ) => {
 				this.setTargetPort(model);
 			});
 		}
 		if (event.data.source) {
-			event.getModel(event.data.sourcePort).then((model: PortModel) => {
+			event.getModel<PortModel>(event.data.sourcePort).then((model: PortModel | null) => {
 				this.setSourcePort(model);
 			});
 		}
 	}
 
-	getRenderedPath(): SVGPathElement[] {
+	getRenderedPath(): SVGPathElement[] | null {
 		return this.renderedPaths;
 	}
 
-	setRenderedPaths(paths: SVGPathElement[]) {
+	setRenderedPaths(paths: SVGPathElement[] | null) {
 		this.renderedPaths = paths;
 	}
 
 	serialize() {
+		const source = this.sourcePort?.getParent() ?? null;
+		const target = this.targetPort?.getParent() ?? null
 		return {
 			...super.serialize(),
-			source: this.sourcePort ? this.sourcePort.getParent().getID() : null,
+			source,
 			sourcePort: this.sourcePort ? this.sourcePort.getID() : null,
-			target: this.targetPort ? this.targetPort.getParent().getID() : null,
+			target,
 			targetPort: this.targetPort ? this.targetPort.getID() : null,
 			points: _.map(this.points, (point) => {
 				return point.serialize();
@@ -138,7 +140,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics>
 		};
 	}
 
-	doClone(lookupTable = {}, clone) {
+	doClone(lookupTable = {}, clone: LinkModel) {
 		clone.setPoints(
 			_.map(this.getPoints(), (point: PointModel) => {
 				return point.clone(lookupTable);
@@ -179,7 +181,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics>
 		return this.points.indexOf(point);
 	}
 
-	getPointModel(id: string): PointModel | null {
+	getPointModel(id: string | undefined | null): PointModel | null {
 		for (var i = 0; i < this.points.length; i++) {
 			if (this.points[i].getID() === id) {
 				return this.points[i];
@@ -188,7 +190,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics>
 		return null;
 	}
 
-	getPortForPoint(point: PointModel): PortModel {
+	getPortForPoint(point: PointModel): PortModel | null {
 		if (this.sourcePort !== null && this.getFirstPoint().getID() === point.getID()) {
 			return this.sourcePort;
 		}
@@ -198,7 +200,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics>
 		return null;
 	}
 
-	getPointForPort(port: PortModel): PointModel {
+	getPointForPort(port: PortModel): PointModel | null {
 		if (this.sourcePort !== null && this.sourcePort.getID() === port.getID()) {
 			return this.getFirstPoint();
 		}
@@ -226,15 +228,15 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics>
 		this.sourcePort = port;
 		this.fireEvent({ port }, 'sourcePortChanged');
 		if (port?.reportedPosition) {
-			this.getPointForPort(port).setPosition(port.getCenter());
+			this.getPointForPort(port)?.setPosition(port.getCenter());
 		}
 	}
 
-	getSourcePort(): PortModel {
+	getSourcePort(): PortModel  | null{
 		return this.sourcePort;
 	}
 
-	getTargetPort(): PortModel {
+	getTargetPort(): PortModel | null {
 		return this.targetPort;
 	}
 
@@ -248,7 +250,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics>
 		this.targetPort = port;
 		this.fireEvent({ port }, 'targetPortChanged');
 		if (port?.reportedPosition) {
-			this.getPointForPort(port).setPosition(port.getCenter());
+			this.getPointForPort(port)?.setPosition(port.getCenter());
 		}
 	}
 

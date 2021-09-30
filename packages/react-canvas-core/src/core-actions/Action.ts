@@ -55,11 +55,12 @@ type ActionOptions = ActionOptionsMouse | ActionOptionsWheel | ActionOptionsKeyb
 export class Action<T extends CanvasEngine = CanvasEngine> {
 	options: ActionOptions;
 	id: string;
-	engine: T | undefined;
+	engine: T ;
 
-	constructor(options: ActionOptions) {
+	constructor(options: ActionOptions,engine: T ) {
 		this.options = options;
 		this.id = Toolkit.UID();
+		this.engine = engine;
 	}
 
 	setEngine(engine: T) {
