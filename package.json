@@ -31,7 +31,9 @@
 		"publish:storybook": "cd diagrams-demo-gallery && yarn storybook:build && ../node_modules/.bin/storybook-to-ghpages --existing-output-dir .out",
 		"test:ci": "lerna run test --stream -- --runInBand --ci ",
 		"test": "lerna run test --stream",
-		"pretty": "prettier --write \"**/*.{ts,tsx,scss,js,jsx}\""
+		"pretty": "prettier --write \"**/*.{ts,tsx,scss,js,jsx}\"",
+		"posttest": "yarn coverage:report",
+		"coverage:report": "yarn istanbul report --dir .coverage --include './**/**/.coverage/coverage-final.json'"
 	},
 	"peerDependencies": {
 		"emotion": "11.*",
@@ -88,5 +90,10 @@
 		"webpack-cli": "^4.7.2",
 		"webpack-dev-server": "^3.11.2",
 		"webpack-node-externals": "^3.0.0"
+	},
+	"dependencies": {
+		"istanbul": "^0.3.22",
+		"istanbul-combine": "^0.3.0",
+		"nyc": "^15.1.0"
 	}
 }

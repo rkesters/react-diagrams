@@ -4,5 +4,6 @@ module.exports = {
 		'^.+\\.tsx?$': 'ts-jest'
 	},
 	roots: [path.join(__dirname, 'tests')],
-	testMatch: ['**/*.test.{ts,tsx}']
+	testMatch: ['**/*.test.{ts,tsx}'],
+	coverageDirectory: '.coverage'
 };

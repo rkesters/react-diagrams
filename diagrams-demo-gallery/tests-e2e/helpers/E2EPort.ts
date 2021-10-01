@@ -12,8 +12,9 @@ export class E2EPort extends E2EBase {
 	}
 
 	async getLinks(): Promise<E2ELink[]> {
+		 /* istanbul ignore next */	
 		const attribute = await page.evaluate((id) => {
-			return document.querySelector(id).getAttribute('data-links');
+		return document.querySelector(id).getAttribute('data-links');
 		}, this.selector());
 		if (attribute.trim() === '') {
 			return [];
