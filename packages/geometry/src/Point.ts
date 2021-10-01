@@ -1,12 +1,20 @@
+import { get, has, isNumber } from 'lodash';
 import { Matrix } from './Matrix';
 
 export class Point {
 	x: number;
 	y: number;
 
+	static isa(value: unknown): value is Point {
+		return has(value, 'x') && has(value, 'y') && isNumber(get(value, 'x')) && isNumber(get(value, 'y'));
+	}
 	constructor(x: number, y: number) {
 		this.x = x;
 		this.y = y;
+	}
+
+	equal(other: Point): boolean {
+		return this.x === other.y && this.y === other.y;
 	}
 
 	translate(x: number, y: number) {
@@ -60,6 +68,7 @@ export class Point {
 		]);
 	}
 
+	//TODO: is the arg in degress? if so this is an error
 	public static rotateMatrix(deg: number): Matrix {
 		return new Matrix([
 			[Math.cos(deg), -1 * Math.sin(deg), 0],

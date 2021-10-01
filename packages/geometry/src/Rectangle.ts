@@ -1,3 +1,4 @@
+import { isNumber } from 'lodash';
 import { Point } from './Point';
 import { Polygon } from './Polygon';
 
@@ -6,14 +7,19 @@ export class Rectangle extends Polygon {
 	constructor(position: Point, width: number, height: number);
 	constructor(x?: number, y?: number, width?: number, height?: number);
 
-	constructor(a: any = 0, b: any = 0, c: any = 0, d: any = 0) {
-		if (a instanceof Point && b instanceof Point && c instanceof Point && d instanceof Point) {
+	constructor(a: Point | number = 0, b: Point | number  = 0, c: Point | number  = 0, d: Point | number  = 0) {
+		if (Point.isa(a) && Point.isa(b) && Point.isa(c) && Point.isa(d)) {
 			super([a, b, c, d]);
-		} else if (a instanceof Point) {
+			return;
+		} else if (Point.isa(a) && isNumber(b) && isNumber(c) && isNumber(d)) {
 			super([a, new Point(a.x + b, a.y), new Point(a.x + b, a.y + c), new Point(a.x, a.y + c)]);
-		} else {
+			return;
+		} else if (isNumber(a) && isNumber(b) && isNumber(c) && isNumber(d)) {
 			super(Rectangle.pointsFromBounds(a, b, c, d));
+			return;
 		}
+
+		throw new Error(`Rectangle call with invaild arguements: ${arguments.length}`);
 	}
 
 	static pointsFromBounds(x: number, y: number, width: number, height: number): Point[] {
