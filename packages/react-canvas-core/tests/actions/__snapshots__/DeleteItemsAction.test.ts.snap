@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DeleteItemsAction Constructor 1`] = `
+Object {
+  "fire": [Function],
+  "type": "key-down",
+}
+`;
+
+exports[`DeleteItemsAction Constructor 2`] = `
+Object {
+  "fire": [Function],
+  "type": "key-down",
+}
+`;
+
+exports[`DeleteItemsAction Constructor 3`] = `
+Object {
+  "fire": [Function],
+  "type": "key-down",
+}
+`;
+
+exports[`DeleteItemsAction Constructor 4`] = `[Function]`;

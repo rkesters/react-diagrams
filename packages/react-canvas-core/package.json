@@ -9,7 +9,8 @@
 	},
 	"scripts": {
 		"clean": "rimraf ./dist",
-		"build": "../../node_modules/.bin/webpack"
+		"build": "../../node_modules/.bin/webpack",
+		"test": "yarn jest --coverage -u"
 	},
 	"publishConfig": {
 		"access": "public"
@@ -29,7 +30,8 @@
 	"module": "./dist/index.js",
 	"typings": "./dist/@types/index",
 	"dependencies": {
-		"@projectstorm/geometry": "^6.6.1"
+		"@projectstorm/geometry": "^6.6.1",
+		"@testing-library/react": "^12.1.2"
 	},
 	"peerDependencies": {
 		"lodash": "4.*",
