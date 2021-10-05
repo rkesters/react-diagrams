@@ -1,7 +1,6 @@
-import { Action, ActionEvent, InputType } from '../core-actions/Action';
-import { KeyboardEvent } from 'react';
 import * as _ from 'lodash';
-import { isEmpty } from 'lodash';
+import { KeyboardEvent } from 'react';
+import { Action, ActionEvent, InputType } from '../core-actions/Action';
 
 export interface KeyModifiers {
 		ctrlKey?: boolean;
@@ -10,6 +9,7 @@ export interface KeyModifiers {
 		metaKey?: boolean;
 }
 export interface DeleteItemsActionOptions {
+	 /** @deprecated */
 	keyCodes?: number[];
 	keys?: string[]
 	modifiers?: KeyModifiers
@@ -27,21 +27,29 @@ return (keyCodes.includes(keyCode) && _.isEqual({ ctrlKey, shiftKey, altKey, met
  */
 export class DeleteItemsAction extends Action {
 
+	#deleteOptions: DeleteItemsActionOptions;
+
+	static #defaultOptions = { keys: ['Backspace', 'Delete']  }
+
+	public get deleteOptions(): Readonly< DeleteItemsActionOptions> {
+		 return this.#deleteOptions;
+	}
 
 	constructor(options: DeleteItemsActionOptions = {}) {
-		const keyCodes = options.keyCodes || [46, 8];
-		const keys = options.keys ?? ['Backspace', 'Delete'];
-		const test = _.isEmpty(options.keyCodes) ? keyTest : keyCodeTest;
-		const modifiers = {
-			ctrlKey: false,
-			shiftKey: false,
-			altKey: false,
-			metaKey: false,
-			...options.modifiers
-		};
+
 		super({
 			type: InputType.KEY_DOWN,
 			fire: (event: ActionEvent<KeyboardEvent>) => {
+				const keyCodes = this.#deleteOptions.keyCodes || [46, 8];
+				const keys = this.#deleteOptions.keys ?? ['Backspace', 'Delete'];
+				const test = _.isEmpty(this.#deleteOptions.keyCodes) ? keyTest : keyCodeTest;
+				const modifiers = {
+					ctrlKey: false,
+					shiftKey: false,
+					altKey: false,
+					metaKey: false,
+					...(this.#deleteOptions.modifiers ?? {})
+				};
 				const { key, keyCode, ctrlKey, shiftKey, altKey, metaKey } = event.event;
 				if (test(keys,keyCodes, modifiers, key, keyCode, ctrlKey, shiftKey, altKey, metaKey)) {
 					_.forEach(this.engine.getModel().getSelectedEntities(), (model) => {
@@ -54,5 +62,7 @@ export class DeleteItemsAction extends Action {
 				}
 			}
 		});
+		this.#deleteOptions = _.isEmpty( options) ? _.defaults (options,DeleteItemsAction.#defaultOptions) : {...options};
+
 	}
 }

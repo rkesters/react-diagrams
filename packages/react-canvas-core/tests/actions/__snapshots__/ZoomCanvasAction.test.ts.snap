@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ZoomCanvasAction Constructor: Options undefined 1`] = `Object {}`;
+
+exports[`ZoomCanvasAction Constructor: Options undefined 2`] = `Object {}`;
+
+exports[`ZoomCanvasAction Constructor: inverseZoom True 1`] = `
+Object {
+  "inverseZoom": true,
+}
+`;
+
+exports[`ZoomCanvasAction Constructor: inverseZoom True, ctrlKey true 1`] = `
+Object {
+  "inverseZoom": true,
+}
+`;
+
+exports[`ZoomCanvasAction Constructor: inverseZoom false 1`] = `
+Object {
+  "inverseZoom": false,
+}
+`;
+
+exports[`ZoomCanvasAction Constructor: inverseZoom false 2`] = `
+Object {
+  "inverseZoom": false,
+}
+`;
+
+exports[`ZoomCanvasAction Constructor: inverseZoom undefined 1`] = `Object {}`;
+
+exports[`ZoomCanvasAction Constructor: inverseZoom undefined 2`] = `Object {}`;
+
+exports[`ZoomCanvasAction Fire action: Options undefined 1`] = `Object {}`;
+
+exports[`ZoomCanvasAction Fire action: Options undefined 2`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: Options undefined 3`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: Options undefined 4`] = `-0.03333333333333144`;
+
+exports[`ZoomCanvasAction Fire action: Options undefined 5`] = `-0.03333333333333144`;
+
+exports[`ZoomCanvasAction Fire action: Options undefined 6`] = `Object {}`;
+
+exports[`ZoomCanvasAction Fire action: Options undefined 7`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: Options undefined 8`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: Options undefined 9`] = `-0.03353833333333341`;
+
+exports[`ZoomCanvasAction Fire action: Options undefined 10`] = `-0.03353833333333341`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom True 1`] = `
+Object {
+  "inverseZoom": true,
+}
+`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom True 2`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom True 3`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom True 4`] = `0.03333333333333258`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom True 5`] = `0.03333333333333258`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom True, ctrlKey true 1`] = `
+Object {
+  "inverseZoom": true,
+}
+`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom True, ctrlKey true 2`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom True, ctrlKey true 3`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom True, ctrlKey true 4`] = `0.03353833333333341`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom True, ctrlKey true 5`] = `0.03353833333333341`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom false 1`] = `
+Object {
+  "inverseZoom": false,
+}
+`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom false 2`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom false 3`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom false 4`] = `-0.03333333333333144`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom false 5`] = `-0.03333333333333144`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom false 6`] = `
+Object {
+  "inverseZoom": false,
+}
+`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom false 7`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom false 8`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom false 9`] = `-0.03353833333333341`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom false 10`] = `-0.03353833333333341`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom undefined 1`] = `Object {}`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom undefined 2`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom undefined 3`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom undefined 4`] = `-0.03333333333333144`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom undefined 5`] = `-0.03333333333333144`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom undefined 6`] = `Object {}`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom undefined 7`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom undefined 8`] = `0`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom undefined 9`] = `-0.03353833333333341`;
+
+exports[`ZoomCanvasAction Fire action: inverseZoom undefined 10`] = `-0.03353833333333341`;

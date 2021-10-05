@@ -1,4 +1,5 @@
 const sharedConfig = require('../../jest.config.js')(__dirname);
 module.exports = {
-	...sharedConfig
+	...sharedConfig,
+	testEnvironment: 'jsdom',
 };

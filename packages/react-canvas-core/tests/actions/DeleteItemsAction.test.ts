@@ -1,22 +1,31 @@
-import { DeleteItemsAction, DeleteItemsActionOptions } from '../../src/actions/DeleteItemsAction';
-import { CanvasEngine, CanvasEngineOptions } from '../../src/CanvasEngine';
-import { ActionEvent } from '../../src/core-actions/Action';
+import { defaults } from 'lodash';
+import { KeyboardEvent } from 'react';
 import { mocked } from 'ts-jest/utils';
-import { SyntheticEvent, KeyboardEvent } from 'react';
-import { createEvent } from '@testing-library/react';
-import { MockedObjectDeep } from 'ts-jest/dist/utils/testing';
-import { BaseEntity } from '../../src/core-models/BaseEntity';
-import { CanvasModelGenerics } from '../../src/entities/canvas/CanvasModel';
+import { DeleteItemsAction, DeleteItemsActionOptions } from '../../src/actions/DeleteItemsAction';
+import { CanvasEngine } from '../../src/CanvasEngine';
+import { ActionEvent } from '../../src/core-actions/Action';
 
 jest.mock('../../src/CanvasEngine');
 
-const MockEngine = mocked(CanvasEngine, true);
-
-const generateKeyboardEvent = (options: DeleteItemsActionOptions, index: number): ActionEvent<KeyboardEvent> => {
+const generateKeyboardEvent = (
+	opts: DeleteItemsActionOptions | undefined,
+	index: number
+): ActionEvent<KeyboardEvent> => {
+	const modifiers = {
+		ctrlKey: false,
+		shiftKey: false,
+		altKey: false,
+		metaKey: false,
+		...(opts.modifiers ?? {})
+	};
+	const options: DeleteItemsActionOptions = opts ?? {
+		keyCodes: [46, 8],
+		keys: ['Backspace', 'Delete']
+	};
 	const event = {
-		...options.modifiers,
-		key: options.keys[index],
-		keyCode: options.keyCodes[index]
+		key: options.keys?.[index] ?? undefined,
+		keyCode: options.keyCodes?.[index] ?? undefined,
+		...modifiers
 	};
 	return { event } as ActionEvent<KeyboardEvent>;
 };
@@ -27,44 +36,126 @@ interface TestCases {
 	index: number;
 }
 
-describe('DeleteItemsAction', () => {
-	let engine = new CanvasEngine();
-	let mockEngine = mocked(engine);
-	beforeEach( () => {
-		mockEngine.getModel.mockReturnValue( {isLocked: jest.fn().mockReturnValue(false)}  as any)
-	})
+const createMockEngine = (islocked: boolean)=> {
+	const engine = new CanvasEngine();
+	const mockEngine = mocked(engine);
+	const models = [{ remove: jest.fn(), isLocked: jest.fn().mockImplementation(() => islocked) }];
+	const mockCModlel: any = {
+		getSelectedEntities: jest.fn().mockImplementation(() => models)
+	};
+	mockEngine.getModel.mockImplementation(() => {
+		return mockCModlel;
+	});
+	return mockEngine;
+}
 
-
-
-	test.each<TestCases>([
-		{
-			name: '10NoModifiers',
-			options: {
-				keyCodes: [69],
-				keys: ['e'],
-				modifiers: {
-					ctrlKey: false,
-					shiftKey: false,
-					altKey: false,
-					metaKey: false
-				}
-			},
-			index: 0
+const testcases: TestCases[] = [
+	{
+		name: 'Deprecaed keyCodes only',
+		options: {
+			keyCodes: [69],
+			modifiers: {
+				ctrlKey: false,
+				shiftKey: false,
+				altKey: false,
+				metaKey: false
+			}
 		},
+		index: 0
+	},
+	{
+		name: '1 allowed character',
+		options: {
+			keyCodes: [69],
+			keys: ['e'],
+			modifiers: {
+				ctrlKey: false,
+				shiftKey: false,
+				altKey: false,
+				metaKey: false
+			}
+		},
+		index: 0
+	},
 
-		{
-			name: 'Undefined Options',
-			options: undefined,
-			index: 0
-		}
-	])('Constructor', (tc) => {
+	{
+		name: '2 Allowed characters',
+		options: {
+			keyCodes: [69, 70],
+			keys: ['e', 'f'],
+			modifiers: {
+				ctrlKey: false,
+				shiftKey: false,
+				altKey: false,
+				metaKey: false
+			}
+		},
+		index: 0
+	},
+	{
+		name: '2 Allowed characters with ctrlKey',
+		options: {
+			keyCodes: [69, 70],
+			keys: ['e', 'f'],
+			modifiers: {
+				ctrlKey: true,
+				shiftKey: false,
+				altKey: false,
+				metaKey: false
+			}
+		},
+		index: 0
+	},
+	{
+		name: 'Undefined Options',
+		options: undefined,
+		index: 0
+	}
+];
+
+describe('DeleteItemsAction', () => {
+	test.each<TestCases>(testcases)('Constructor: $name', (tc) => {
 		const action: DeleteItemsAction = new DeleteItemsAction(tc.options);
-		action.setEngine(engine);
+		expect(action.deleteOptions).toMatchSnapshot();
+	});
 
-		expect(action.options).toMatchSnapshot();
+	describe('Fire Event', () => {
 
-		const event = generateKeyboardEvent(tc.options, tc.index);
+		describe('Model is not locked', () => {
 
-		action.options.fire(event);
+			test.each<TestCases>(testcases)('Send Correct Keys: $name', (tc) => {
+				const engine = createMockEngine(false);
+				const action: DeleteItemsAction = new DeleteItemsAction(tc.options);
+				action.setEngine(engine);
+
+				const event = generateKeyboardEvent(defaults(tc.options, { keys: ['Backspace', 'Delete'] }), tc.index);
+
+				expect(event).toMatchSnapshot();
+				action.options.fire(event);
+
+				expect(engine.getModel).toHaveBeenCalled();
+				expect(engine.getModel().getSelectedEntities).toMatchSnapshot();
+				expect(engine.getModel().getSelectedEntities()[0].isLocked).toHaveBeenCalled();
+				expect(engine.getModel().getSelectedEntities()[0].remove).toHaveBeenCalled();
+			});
+		});
+		describe('Model is locked', () => {
+
+			test.each<TestCases>(testcases)('Send Correct Keys: $name', (tc) => {
+				const engine = createMockEngine(true);
+				const action: DeleteItemsAction = new DeleteItemsAction(tc.options);
+				action.setEngine(engine);
+
+				const event = generateKeyboardEvent(defaults(tc.options, { keys: ['Backspace', 'Delete'] }), tc.index);
+
+				expect(event).toMatchSnapshot();
+				action.options.fire(event);
+
+				expect(engine.getModel).toHaveBeenCalled();
+				expect(engine.getModel().getSelectedEntities).toMatchSnapshot();
+				expect(engine.getModel().getSelectedEntities()[0].isLocked).toHaveBeenCalled();
+				expect(engine.getModel().getSelectedEntities()[0].remove).not.toHaveBeenCalled();
+			});
+		});
 	});
 });

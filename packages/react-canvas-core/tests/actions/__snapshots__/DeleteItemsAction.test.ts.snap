@@ -1,24 +1,549 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DeleteItemsAction Constructor 1`] = `
+exports[`DeleteItemsAction Constructor: 1 allowed character 1`] = `
 Object {
-  "fire": [Function],
-  "type": "key-down",
+  "keyCodes": Array [
+    69,
+  ],
+  "keys": Array [
+    "e",
+  ],
+  "modifiers": Object {
+    "altKey": false,
+    "ctrlKey": false,
+    "metaKey": false,
+    "shiftKey": false,
+  },
 }
 `;
 
-exports[`DeleteItemsAction Constructor 2`] = `
+exports[`DeleteItemsAction Constructor: 2 Allowed characters 1`] = `
 Object {
-  "fire": [Function],
-  "type": "key-down",
+  "keyCodes": Array [
+    69,
+    70,
+  ],
+  "keys": Array [
+    "e",
+    "f",
+  ],
+  "modifiers": Object {
+    "altKey": false,
+    "ctrlKey": false,
+    "metaKey": false,
+    "shiftKey": false,
+  },
 }
 `;
 
-exports[`DeleteItemsAction Constructor 3`] = `
+exports[`DeleteItemsAction Constructor: 2 Allowed characters with ctrlKey 1`] = `
 Object {
-  "fire": [Function],
-  "type": "key-down",
+  "keyCodes": Array [
+    69,
+    70,
+  ],
+  "keys": Array [
+    "e",
+    "f",
+  ],
+  "modifiers": Object {
+    "altKey": false,
+    "ctrlKey": true,
+    "metaKey": false,
+    "shiftKey": false,
+  },
 }
 `;
 
-exports[`DeleteItemsAction Constructor 4`] = `[Function]`;
+exports[`DeleteItemsAction Constructor: Deprecaed keyCodes only 1`] = `
+Object {
+  "keyCodes": Array [
+    69,
+  ],
+  "modifiers": Object {
+    "altKey": false,
+    "ctrlKey": false,
+    "metaKey": false,
+    "shiftKey": false,
+  },
+}
+`;
+
+exports[`DeleteItemsAction Constructor: Undefined Options 1`] = `
+Object {
+  "keys": Array [
+    "Backspace",
+    "Delete",
+  ],
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is locked Send Correct Keys: 1 allowed character 1`] = `
+Object {
+  "event": Object {
+    "altKey": false,
+    "ctrlKey": false,
+    "key": "e",
+    "keyCode": 69,
+    "metaKey": false,
+    "shiftKey": false,
+  },
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is locked Send Correct Keys: 1 allowed character 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": Array [
+        Object {
+          "isLocked": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": true,
+              },
+            ],
+          },
+          "remove": [MockFunction],
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is locked Send Correct Keys: 2 Allowed characters 1`] = `
+Object {
+  "event": Object {
+    "altKey": false,
+    "ctrlKey": false,
+    "key": "e",
+    "keyCode": 69,
+    "metaKey": false,
+    "shiftKey": false,
+  },
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is locked Send Correct Keys: 2 Allowed characters 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": Array [
+        Object {
+          "isLocked": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": true,
+              },
+            ],
+          },
+          "remove": [MockFunction],
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is locked Send Correct Keys: 2 Allowed characters with ctrlKey 1`] = `
+Object {
+  "event": Object {
+    "altKey": false,
+    "ctrlKey": true,
+    "key": "e",
+    "keyCode": 69,
+    "metaKey": false,
+    "shiftKey": false,
+  },
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is locked Send Correct Keys: 2 Allowed characters with ctrlKey 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": Array [
+        Object {
+          "isLocked": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": true,
+              },
+            ],
+          },
+          "remove": [MockFunction],
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is locked Send Correct Keys: Deprecaed keyCodes only 1`] = `
+Object {
+  "event": Object {
+    "altKey": false,
+    "ctrlKey": false,
+    "key": "Backspace",
+    "keyCode": 69,
+    "metaKey": false,
+    "shiftKey": false,
+  },
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is locked Send Correct Keys: Deprecaed keyCodes only 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": Array [
+        Object {
+          "isLocked": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": true,
+              },
+            ],
+          },
+          "remove": [MockFunction],
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is locked Send Correct Keys: Undefined Options 1`] = `
+Object {
+  "event": Object {
+    "altKey": false,
+    "ctrlKey": false,
+    "key": "Backspace",
+    "keyCode": undefined,
+    "metaKey": false,
+    "shiftKey": false,
+  },
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is locked Send Correct Keys: Undefined Options 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": Array [
+        Object {
+          "isLocked": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": true,
+              },
+            ],
+          },
+          "remove": [MockFunction],
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is not locked Send Correct Keys: 1 allowed character 1`] = `
+Object {
+  "event": Object {
+    "altKey": false,
+    "ctrlKey": false,
+    "key": "e",
+    "keyCode": 69,
+    "metaKey": false,
+    "shiftKey": false,
+  },
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is not locked Send Correct Keys: 1 allowed character 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": Array [
+        Object {
+          "isLocked": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": false,
+              },
+            ],
+          },
+          "remove": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is not locked Send Correct Keys: 2 Allowed characters 1`] = `
+Object {
+  "event": Object {
+    "altKey": false,
+    "ctrlKey": false,
+    "key": "e",
+    "keyCode": 69,
+    "metaKey": false,
+    "shiftKey": false,
+  },
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is not locked Send Correct Keys: 2 Allowed characters 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": Array [
+        Object {
+          "isLocked": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": false,
+              },
+            ],
+          },
+          "remove": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is not locked Send Correct Keys: 2 Allowed characters with ctrlKey 1`] = `
+Object {
+  "event": Object {
+    "altKey": false,
+    "ctrlKey": true,
+    "key": "e",
+    "keyCode": 69,
+    "metaKey": false,
+    "shiftKey": false,
+  },
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is not locked Send Correct Keys: 2 Allowed characters with ctrlKey 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": Array [
+        Object {
+          "isLocked": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": false,
+              },
+            ],
+          },
+          "remove": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is not locked Send Correct Keys: Deprecaed keyCodes only 1`] = `
+Object {
+  "event": Object {
+    "altKey": false,
+    "ctrlKey": false,
+    "key": "Backspace",
+    "keyCode": 69,
+    "metaKey": false,
+    "shiftKey": false,
+  },
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is not locked Send Correct Keys: Deprecaed keyCodes only 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": Array [
+        Object {
+          "isLocked": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": false,
+              },
+            ],
+          },
+          "remove": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is not locked Send Correct Keys: Undefined Options 1`] = `
+Object {
+  "event": Object {
+    "altKey": false,
+    "ctrlKey": false,
+    "key": "Backspace",
+    "keyCode": undefined,
+    "metaKey": false,
+    "shiftKey": false,
+  },
+}
+`;
+
+exports[`DeleteItemsAction Fire Event Model is not locked Send Correct Keys: Undefined Options 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": Array [
+        Object {
+          "isLocked": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": false,
+              },
+            ],
+          },
+          "remove": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
+        },
+      ],
+    },
+  ],
+}
+`;

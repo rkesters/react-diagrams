@@ -1,5 +1,6 @@
 const path = require('path');
 module.exports = (dir) => ({
+	preset: 'ts-jest',
 	transform: {
 		'^.+\\.tsx?$': 'ts-jest'
 	},

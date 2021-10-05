@@ -6,6 +6,11 @@ export interface ZoomCanvasActionOptions {
 }
 
 export class ZoomCanvasAction extends Action {
+	#zoomCanvasActionOpions: ZoomCanvasActionOptions;
+	public get zoomCanvasActionOpions(): ZoomCanvasActionOptions {
+		return this.#zoomCanvasActionOpions;
+	}
+
 	constructor(options: ZoomCanvasActionOptions = {}) {
 		super({
 			type: InputType.MOUSE_WHEEL,
@@ -19,7 +24,7 @@ export class ZoomCanvasAction extends Action {
 				const model = this.engine.getModel();
 				event.stopPropagation();
 				const oldZoomFactor = this.engine.getModel().getZoomLevel() / 100;
-				let scrollDelta = options.inverseZoom ? -event.deltaY : event.deltaY;
+				let scrollDelta = this.zoomCanvasActionOpions.inverseZoom ? -event.deltaY : event.deltaY;
 				//check if it is pinch gesture
 				if (event.ctrlKey && scrollDelta % 1 !== 0) {
 					/*
@@ -60,5 +65,7 @@ export class ZoomCanvasAction extends Action {
 				}
 			}
 		});
+
+		this.#zoomCanvasActionOpions = {...options};
 	}
 }
