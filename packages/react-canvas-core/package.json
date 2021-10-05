@@ -10,7 +10,7 @@
 	"scripts": {
 		"clean": "rimraf ./dist",
 		"build": "../../node_modules/.bin/webpack",
-		"test": "yarn jest --coverage -u"
+		"test": "yarn jest --coverage"
 	},
 	"publishConfig": {
 		"access": "public"

@@ -1,3 +1,4 @@
+import { has } from 'lodash';
 import { Toolkit } from '../Toolkit';
 
 export interface BaseEvent {
@@ -42,6 +43,10 @@ export interface ListenerHandle {
 	 * Original Listener
 	 */
 	listener: BaseListener;
+}
+
+export function isaListenerHandle(value: unknown): value is ListenerHandle {
+	return has(value, 'id')&& has(value, 'deregister') && has(value, 'listener');
 }
 
 /**
@@ -129,7 +134,7 @@ export class BaseObserver<L extends BaseListener = BaseListener> {
 	}
 
 	deregisterListener(listener: L | ListenerHandle) {
-		if (typeof listener === 'object') {
+		if (isaListenerHandle(listener)) {
 			(listener as ListenerHandle).deregister();
 			return true;
 		}
