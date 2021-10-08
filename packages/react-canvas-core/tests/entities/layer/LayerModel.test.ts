@@ -1,61 +1,8 @@
 import { map } from 'lodash';
-import { CanvasEngine, CanvasEngineListener } from '../../../src/CanvasEngine';
-import { BaseModel, BaseModelGenerics } from '../../../src/core-models/BaseModel';
-import { GenerateModelEvent, AbstractModelFactory } from '../../../src/core/AbstractModelFactory';
-import { AbstractReactFactory, GenerateWidgetEvent } from '../../../src/core/AbstractReactFactory';
-import { FactoryBank, FactoryBankListener } from '../../../src/core/FactoryBank';
-import { CanvasModel, CanvasModelGenerics } from '../../../src/entities/canvas/CanvasModel';
-import { LayerModel, LayerModelGenerics, LayerModelOptions } from '../../../src/entities/layer/LayerModel';
+import { BaseModel } from '../../../src/core-models/BaseModel';
+import { CanvasModel } from '../../../src/entities/canvas/CanvasModel';
+import { TestLayer } from '../../support/impls/TestLayer';
 
-class TestLayerFactory extends AbstractModelFactory<
-	BaseModel<BaseModelGenerics>,
-	CanvasEngine<CanvasEngineListener, CanvasModel<CanvasModelGenerics>>
-> {
-	constructor() {
-		super('test');
-	}
-	generateModel(event: GenerateModelEvent): BaseModel<BaseModelGenerics> {
-		return new BaseModel({});
-	}
-}
-
-class TestLayer extends LayerModel {
-
-	#childModelFactoryBank = new FactoryBank<
-		AbstractModelFactory<
-			BaseModel<BaseModelGenerics>,
-			CanvasEngine<CanvasEngineListener, CanvasModel<CanvasModelGenerics>>
-		>,
-		FactoryBankListener<
-			AbstractModelFactory<
-				BaseModel<BaseModelGenerics>,
-				CanvasEngine<CanvasEngineListener, CanvasModel<CanvasModelGenerics>>
-			>
-		>
-	>();
-
-	constructor(options: LayerModelOptions= {}) {
-		super({...options, type: 'test' });
-
-		this.#childModelFactoryBank.registerFactory(new TestLayerFactory());
-	}
-	getChildModelFactoryBank(
-		engine: CanvasEngine<CanvasEngineListener, CanvasModel<CanvasModelGenerics>>
-	): FactoryBank<
-		AbstractModelFactory<
-			BaseModel<BaseModelGenerics>,
-			CanvasEngine<CanvasEngineListener, CanvasModel<CanvasModelGenerics>>
-		>,
-		FactoryBankListener<
-			AbstractModelFactory<
-				BaseModel<BaseModelGenerics>,
-				CanvasEngine<CanvasEngineListener, CanvasModel<CanvasModelGenerics>>
-			>
-		>
-	> {
-		return this.#childModelFactoryBank;
-	}
-}
 
 describe('LayerModel', () => {
 	test('Contructor', () => {
@@ -63,7 +10,7 @@ describe('LayerModel', () => {
 
 		expect(model.getOptions()).toMatchSnapshot({ id: expect.any(String) });
 
-		 model = new TestLayer({isSvg: true, transformed: true, type: 'bad'});
+		 model = new TestLayer({isSvg: true, transformed: true});
 
 		expect(model.getOptions()).toMatchSnapshot({ id: expect.any(String) });
 	});

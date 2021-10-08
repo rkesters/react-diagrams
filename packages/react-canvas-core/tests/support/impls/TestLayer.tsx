@@ -47,7 +47,7 @@ export class TestLayer extends LayerModel {
 	>();
 
 	constructor(options: LayerModelOptions = {}) {
-		super({ ...options, type: 'test' });
+		super({ type: 'test', ...options,  });
 
 		this.#childModelFactoryBank.registerFactory(new TestLayerFactory());
 	}

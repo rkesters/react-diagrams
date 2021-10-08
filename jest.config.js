@@ -11,5 +11,6 @@ module.exports = (dir) => ({
 	collectCoverageFrom: [
 		'src/**/*.{ts,tsx}',
 		'!**/node_modules/**',
+		'!src/index.ts'
 	],
 });
