@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LayerModel Contructor 1`] = `
+Object {
+  "id": Any<String>,
+  "type": "test",
+}
+`;
+
+exports[`LayerModel Contructor 2`] = `
+Object {
+  "id": Any<String>,
+  "isSvg": true,
+  "transformed": true,
+  "type": "test",
+}
+`;
+
+exports[`LayerModel serialize 1`] = `
+Object {
+  "extras": undefined,
+  "id": Any<String>,
+  "isSvg": undefined,
+  "locked": undefined,
+  "models": Object {},
+  "selected": undefined,
+  "transformed": undefined,
+  "type": "test",
+}
+`;
+
+exports[`LayerModel serialize 2`] = `
+Object {
+  "extras": undefined,
+  "id": "dog",
+  "isSvg": false,
+  "locked": undefined,
+  "models": Object {},
+  "selected": undefined,
+  "transformed": false,
+  "type": "test",
+}
+`;

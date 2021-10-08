@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SelectionLayerModel Constructor 1`] = `
+Object {
+  "id": Any<String>,
+  "isSvg": false,
+  "transformed": false,
+  "type": "selection",
+}
+`;

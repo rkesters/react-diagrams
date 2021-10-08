@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CanvasModel constructor Default 1`] = `
+Object {
+  "gridSize": 0,
+  "id": Any<String>,
+  "offsetX": 0,
+  "offsetY": 0,
+  "zoom": 100,
+}
+`;
+
+exports[`CanvasModel constructor With options 1`] = `
+Object {
+  "gridSize": 10,
+  "id": Any<String>,
+  "offsetX": 100,
+  "offsetY": 200,
+  "zoom": 43,
+}
+`;
+
+exports[`CanvasModel serialize Default 1`] = `
+Object {
+  "gridSize": 0,
+  "id": Any<String>,
+  "layers": Array [
+    Object {
+      "extras": undefined,
+      "id": Any<String>,
+      "isSvg": undefined,
+      "locked": undefined,
+      "models": Object {},
+      "selected": undefined,
+      "transformed": undefined,
+      "type": "selection",
+    },
+  ],
+  "locked": undefined,
+  "offsetX": 0,
+  "offsetY": 0,
+  "zoom": 100,
+}
+`;

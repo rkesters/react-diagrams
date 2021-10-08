@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TransformLayerWidget getTransformStyle 1`] = `Object {}`;
+
+exports[`TransformLayerWidget getTransformStyle 2`] = `
+Object {
+  "transform": "
+			translate(
+				0px,
+				0px)
+			scale(
+				1
+			)
+  	",
+}
+`;
+
+exports[`TransformLayerWidget getTransformStyle 3`] = `
+Object {
+  "transform": "
+			translate(
+				10px,
+				0px)
+			scale(
+				1
+			)
+  	",
+}
+`;
+
+exports[`TransformLayerWidget getTransformStyle 4`] = `
+Object {
+  "transform": "
+			translate(
+				10px,
+				20px)
+			scale(
+				1
+			)
+  	",
+}
+`;

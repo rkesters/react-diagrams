@@ -68,6 +68,10 @@ export class CanvasEngine<
 		}
 	}
 
+	getOptions(): Readonly<CanvasEngineOptions> {
+		return this.options;
+	}
+
 	getStateMachine() {
 		return this.stateMachine;
 	}

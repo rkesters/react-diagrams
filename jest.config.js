@@ -4,7 +4,12 @@ module.exports = (dir) => ({
 	transform: {
 		'^.+\\.tsx?$': 'ts-jest'
 	},
-	roots: [path.join(dir, 'tests')],
 	testMatch: ['**/*.test.{ts,tsx}'],
-	coverageDirectory: '.coverage'
+	coverageDirectory: '.coverage',
+	coverageReporters: [ "json", "lcov"],
+	roots: ['<rootDir>/src', '<rootDir>/tests'],
+	collectCoverageFrom: [
+		'src/**/*.{ts,tsx}',
+		'!**/node_modules/**',
+	],
 });

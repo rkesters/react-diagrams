@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DefaultState Action Drag Start 1`] = `
+Object {
+  "name": "drag-canvas",
+}
+`;
+
+exports[`DefaultState Action Move 1`] = `
+Object {
+  "name": "move-items",
+}
+`;
+
+exports[`DefaultState Action Touch 1`] = `
+Object {
+  "name": "drag-canvas",
+}
+`;
+
+exports[`DefaultState Constructor 1`] = `
+Object {
+  "name": "default",
+}
+`;

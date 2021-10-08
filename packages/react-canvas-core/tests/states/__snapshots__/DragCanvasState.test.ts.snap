@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DragCanvasState Constructor 1`] = `
+Object {
+  "name": "drag-canvas",
+}
+`;

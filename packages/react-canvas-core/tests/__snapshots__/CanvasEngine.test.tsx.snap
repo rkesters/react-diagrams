@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CanvasEngine constructor: Provide Default Options 1`] = `
+Object {
+  "registerDefaultDeleteItemsAction": true,
+  "registerDefaultZoomCanvasAction": true,
+  "repaintDebounceMs": 0,
+}
+`;
+
+exports[`CanvasEngine constructor: Provide Options 1`] = `
+Object {
+  "registerDefaultDeleteItemsAction": false,
+  "registerDefaultZoomCanvasAction": false,
+  "repaintDebounceMs": 10,
+}
+`;
+
+exports[`CanvasEngine constructor: Provide Undefined Options 1`] = `
+Object {
+  "registerDefaultDeleteItemsAction": true,
+  "registerDefaultZoomCanvasAction": true,
+  "repaintDebounceMs": 0,
+}
+`;
