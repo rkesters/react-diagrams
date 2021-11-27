@@ -30,10 +30,7 @@
 	"module": "./dist/index.js",
 	"typings": "./dist/@types/index",
 	"dependencies": {
-		"@projectstorm/geometry": "^6.6.1",
-		"@testing-library/jest-dom": "^5.14.1",
-		"@testing-library/react": "^12.1.2",
-		"jest-mock-console": "^1.2.3"
+		"@projectstorm/geometry": "^6.6.1"
 	},
 	"peerDependencies": {
 		"lodash": "4.*",

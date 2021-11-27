@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LabelModel constructor: Missing Offset 1`] = `
+Object {
+  "id": Any<String>,
+  "offsetX": 0,
+  "offsetY": 0,
+}
+`;
+
+exports[`LabelModel constructor: default 1`] = `
+Object {
+  "id": Any<String>,
+  "offsetX": 0,
+  "offsetY": 0,
+}
+`;
+
+exports[`LabelModel serialize: default 1`] = `
+Object {
+  "extras": undefined,
+  "id": Any<String>,
+  "locked": undefined,
+  "offsetX": 0,
+  "offsetY": 0,
+  "selected": undefined,
+  "type": undefined,
+}
+`;
+
+exports[`LabelModel serialize: default 2`] = `
+Object {
+  "extras": Object {},
+  "id": "god",
+  "locked": true,
+  "offsetX": 10,
+  "offsetY": 20,
+  "selected": true,
+  "type": undefined,
+}
+`;

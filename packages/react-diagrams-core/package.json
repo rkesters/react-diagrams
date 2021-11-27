@@ -12,7 +12,7 @@
 		"build": "../../node_modules/.bin/webpack",
 		"build:es": "../../node_modules/.bin/tsc",
 		"build:prod": "NODE_ENV=production ../../node_modules/.bin/webpack && NODE_ENV=production  ../../node_modules/.bin/tsc",
-    "test": "yarn jest --coverage --passWithNoTests "
+    "test": "yarn jest --coverage LabelWidget "
 	},
 	"publishConfig": {
 		"access": "public"
