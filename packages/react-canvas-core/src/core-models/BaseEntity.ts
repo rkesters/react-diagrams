@@ -1,12 +1,13 @@
-import { Toolkit } from '../Toolkit';
+//import debug from 'debug';
 import * as _ from 'lodash';
 import { CanvasEngine } from '../CanvasEngine';
 import { BaseEvent, BaseListener, BaseObserver } from '../core/BaseObserver';
-import { AbstractModelFactory } from '../core/AbstractModelFactory';
+import { Toolkit } from '../Toolkit';
 import { BaseModel } from './BaseModel';
+import debug from 'debug';
 
+const dbg = debug('reactDiagrams:canvasCore:BaseEntity');
 export interface BaseEntityEvent<T extends BaseEntity = BaseEntity> extends BaseEvent {
-	entity: T;
 }
 
 export interface BaseEntityListener<T extends BaseEntity = BaseEntity> extends BaseListener {
@@ -89,6 +90,7 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
 	}
 
 	fireEvent<L extends Partial<BaseEntityEvent> & object>(event: L, k: keyof T['LISTENER']) {
+		dbg(`fireEvent ${k}`);
 		super.fireEvent(
 			{
 				entity: this,

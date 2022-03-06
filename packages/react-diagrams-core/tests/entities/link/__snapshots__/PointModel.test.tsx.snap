@@ -1,0 +1,555 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PointModel All: Connected 1`] = `
+PointModel {
+  "listeners": Object {},
+  "options": Object {
+    "id": "1",
+    "link": LinkModel {
+      "labels": Array [],
+      "listeners": Object {},
+      "options": Object {
+        "id": "16",
+      },
+      "points": Array [
+        [Circular],
+      ],
+      "renderedPaths": Array [],
+      "sourcePort": PortModel {
+        "links": Object {
+          "16": [Circular],
+        },
+        "listeners": Object {},
+        "options": Object {
+          "id": "2",
+          "name": "source",
+        },
+        "position": Point {
+          "x": 0,
+          "y": 0,
+        },
+        "reportedPosition": false,
+      },
+      "targetPort": null,
+    },
+    "locked": false,
+    "position": Point {
+      "x": 0,
+      "y": 0,
+    },
+    "selected": false,
+    "type": "point",
+  },
+  "parent": LinkModel {
+    "labels": Array [],
+    "listeners": Object {},
+    "options": Object {
+      "id": "16",
+    },
+    "points": Array [
+      [Circular],
+    ],
+    "renderedPaths": Array [],
+    "sourcePort": PortModel {
+      "links": Object {
+        "16": [Circular],
+      },
+      "listeners": Object {},
+      "options": Object {
+        "id": "2",
+        "name": "source",
+      },
+      "position": Point {
+        "x": 0,
+        "y": 0,
+      },
+      "reportedPosition": false,
+    },
+    "targetPort": null,
+  },
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+}
+`;
+
+exports[`PointModel All: Full config 1`] = `
+PointModel {
+  "listeners": Object {},
+  "options": Object {
+    "extra": Object {
+      "foo": "bar",
+    },
+    "id": "1",
+    "link": LinkModel {
+      "labels": Array [],
+      "listeners": Object {},
+      "options": Object {
+        "id": "4",
+      },
+      "points": Array [
+        PointModel {
+          "listeners": Object {},
+          "options": Object {
+            "id": "5",
+            "link": [Circular],
+            "type": "point",
+          },
+          "parent": [Circular],
+          "position": Point {
+            "x": 0,
+            "y": 0,
+          },
+        },
+        PointModel {
+          "listeners": Object {},
+          "options": Object {
+            "id": "6",
+            "link": [Circular],
+            "type": "point",
+          },
+          "parent": [Circular],
+          "position": Point {
+            "x": 0,
+            "y": 0,
+          },
+        },
+      ],
+      "renderedPaths": Array [],
+      "sourcePort": null,
+      "targetPort": null,
+    },
+    "locked": false,
+    "position": Point {
+      "x": 0,
+      "y": 0,
+    },
+    "selected": false,
+    "type": "point",
+  },
+  "parent": LinkModel {
+    "labels": Array [],
+    "listeners": Object {},
+    "options": Object {
+      "id": "4",
+    },
+    "points": Array [
+      PointModel {
+        "listeners": Object {},
+        "options": Object {
+          "id": "5",
+          "link": [Circular],
+          "type": "point",
+        },
+        "parent": [Circular],
+        "position": Point {
+          "x": 0,
+          "y": 0,
+        },
+      },
+      PointModel {
+        "listeners": Object {},
+        "options": Object {
+          "id": "6",
+          "link": [Circular],
+          "type": "point",
+        },
+        "parent": [Circular],
+        "position": Point {
+          "x": 0,
+          "y": 0,
+        },
+      },
+    ],
+    "renderedPaths": Array [],
+    "sourcePort": null,
+    "targetPort": null,
+  },
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+}
+`;
+
+exports[`PointModel All: Locked 1`] = `
+PointModel {
+  "listeners": Object {},
+  "options": Object {
+    "id": "1",
+    "link": LinkModel {
+      "labels": Array [],
+      "listeners": Object {},
+      "options": Object {
+        "id": "10",
+      },
+      "points": Array [
+        PointModel {
+          "listeners": Object {},
+          "options": Object {
+            "id": "11",
+            "link": [Circular],
+            "type": "point",
+          },
+          "parent": [Circular],
+          "position": Point {
+            "x": 0,
+            "y": 0,
+          },
+        },
+        PointModel {
+          "listeners": Object {},
+          "options": Object {
+            "id": "12",
+            "link": [Circular],
+            "type": "point",
+          },
+          "parent": [Circular],
+          "position": Point {
+            "x": 0,
+            "y": 0,
+          },
+        },
+      ],
+      "renderedPaths": Array [],
+      "sourcePort": null,
+      "targetPort": null,
+    },
+    "locked": true,
+    "position": Point {
+      "x": 0,
+      "y": 0,
+    },
+    "type": "point",
+  },
+  "parent": LinkModel {
+    "labels": Array [],
+    "listeners": Object {},
+    "options": Object {
+      "id": "10",
+    },
+    "points": Array [
+      PointModel {
+        "listeners": Object {},
+        "options": Object {
+          "id": "11",
+          "link": [Circular],
+          "type": "point",
+        },
+        "parent": [Circular],
+        "position": Point {
+          "x": 0,
+          "y": 0,
+        },
+      },
+      PointModel {
+        "listeners": Object {},
+        "options": Object {
+          "id": "12",
+          "link": [Circular],
+          "type": "point",
+        },
+        "parent": [Circular],
+        "position": Point {
+          "x": 0,
+          "y": 0,
+        },
+      },
+    ],
+    "renderedPaths": Array [],
+    "sourcePort": null,
+    "targetPort": null,
+  },
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+}
+`;
+
+exports[`PointModel All: Locked Parent 1`] = `
+PointModel {
+  "listeners": Object {},
+  "options": Object {
+    "id": "1",
+    "link": LinkModel {
+      "labels": Array [],
+      "listeners": Object {},
+      "options": Object {
+        "id": "7",
+        "locked": true,
+      },
+      "points": Array [
+        PointModel {
+          "listeners": Object {},
+          "options": Object {
+            "id": "8",
+            "link": [Circular],
+            "type": "point",
+          },
+          "parent": [Circular],
+          "position": Point {
+            "x": 0,
+            "y": 0,
+          },
+        },
+        PointModel {
+          "listeners": Object {},
+          "options": Object {
+            "id": "9",
+            "link": [Circular],
+            "type": "point",
+          },
+          "parent": [Circular],
+          "position": Point {
+            "x": 0,
+            "y": 0,
+          },
+        },
+      ],
+      "renderedPaths": Array [],
+      "sourcePort": null,
+      "targetPort": null,
+    },
+    "position": Point {
+      "x": 0,
+      "y": 0,
+    },
+    "type": "point",
+  },
+  "parent": LinkModel {
+    "labels": Array [],
+    "listeners": Object {},
+    "options": Object {
+      "id": "7",
+      "locked": true,
+    },
+    "points": Array [
+      PointModel {
+        "listeners": Object {},
+        "options": Object {
+          "id": "8",
+          "link": [Circular],
+          "type": "point",
+        },
+        "parent": [Circular],
+        "position": Point {
+          "x": 0,
+          "y": 0,
+        },
+      },
+      PointModel {
+        "listeners": Object {},
+        "options": Object {
+          "id": "9",
+          "link": [Circular],
+          "type": "point",
+        },
+        "parent": [Circular],
+        "position": Point {
+          "x": 0,
+          "y": 0,
+        },
+      },
+    ],
+    "renderedPaths": Array [],
+    "sourcePort": null,
+    "targetPort": null,
+  },
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+}
+`;
+
+exports[`PointModel All: Minimal config 1`] = `
+PointModel {
+  "listeners": Object {},
+  "options": Object {
+    "id": "1",
+    "link": LinkModel {
+      "labels": Array [],
+      "listeners": Object {},
+      "options": Object {
+        "id": "1",
+      },
+      "points": Array [
+        PointModel {
+          "listeners": Object {},
+          "options": Object {
+            "id": "2",
+            "link": [Circular],
+            "type": "point",
+          },
+          "parent": [Circular],
+          "position": Point {
+            "x": 0,
+            "y": 0,
+          },
+        },
+        PointModel {
+          "listeners": Object {},
+          "options": Object {
+            "id": "3",
+            "link": [Circular],
+            "type": "point",
+          },
+          "parent": [Circular],
+          "position": Point {
+            "x": 0,
+            "y": 0,
+          },
+        },
+      ],
+      "renderedPaths": Array [],
+      "sourcePort": null,
+      "targetPort": null,
+    },
+    "position": Point {
+      "x": 0,
+      "y": 0,
+    },
+    "type": "point",
+  },
+  "parent": LinkModel {
+    "labels": Array [],
+    "listeners": Object {},
+    "options": Object {
+      "id": "1",
+    },
+    "points": Array [
+      PointModel {
+        "listeners": Object {},
+        "options": Object {
+          "id": "2",
+          "link": [Circular],
+          "type": "point",
+        },
+        "parent": [Circular],
+        "position": Point {
+          "x": 0,
+          "y": 0,
+        },
+      },
+      PointModel {
+        "listeners": Object {},
+        "options": Object {
+          "id": "3",
+          "link": [Circular],
+          "type": "point",
+        },
+        "parent": [Circular],
+        "position": Point {
+          "x": 0,
+          "y": 0,
+        },
+      },
+    ],
+    "renderedPaths": Array [],
+    "sourcePort": null,
+    "targetPort": null,
+  },
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+}
+`;
+
+exports[`PointModel All: Selected 1`] = `
+PointModel {
+  "listeners": Object {},
+  "options": Object {
+    "id": "1",
+    "link": LinkModel {
+      "labels": Array [],
+      "listeners": Object {},
+      "options": Object {
+        "id": "13",
+      },
+      "points": Array [
+        PointModel {
+          "listeners": Object {},
+          "options": Object {
+            "id": "14",
+            "link": [Circular],
+            "type": "point",
+          },
+          "parent": [Circular],
+          "position": Point {
+            "x": 0,
+            "y": 0,
+          },
+        },
+        PointModel {
+          "listeners": Object {},
+          "options": Object {
+            "id": "15",
+            "link": [Circular],
+            "type": "point",
+          },
+          "parent": [Circular],
+          "position": Point {
+            "x": 0,
+            "y": 0,
+          },
+        },
+      ],
+      "renderedPaths": Array [],
+      "sourcePort": null,
+      "targetPort": null,
+    },
+    "locked": true,
+    "position": Point {
+      "x": 0,
+      "y": 0,
+    },
+    "selected": true,
+    "type": "point",
+  },
+  "parent": LinkModel {
+    "labels": Array [],
+    "listeners": Object {},
+    "options": Object {
+      "id": "13",
+    },
+    "points": Array [
+      PointModel {
+        "listeners": Object {},
+        "options": Object {
+          "id": "14",
+          "link": [Circular],
+          "type": "point",
+        },
+        "parent": [Circular],
+        "position": Point {
+          "x": 0,
+          "y": 0,
+        },
+      },
+      PointModel {
+        "listeners": Object {},
+        "options": Object {
+          "id": "15",
+          "link": [Circular],
+          "type": "point",
+        },
+        "parent": [Circular],
+        "position": Point {
+          "x": 0,
+          "y": 0,
+        },
+      },
+    ],
+    "renderedPaths": Array [],
+    "sourcePort": null,
+    "targetPort": null,
+  },
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+}
+`;

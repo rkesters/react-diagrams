@@ -1,0 +1,835 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NodeModel constructor and clone: Locked and Selected: clone 1`] = `
+NodeModel {
+  "height": 0,
+  "listeners": Object {},
+  "options": Object {
+    "id": "2",
+  },
+  "ports": Object {},
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 0,
+}
+`;
+
+exports[`NodeModel constructor and clone: Locked and Selected: initial 1`] = `
+NodeModel {
+  "height": 0,
+  "listeners": Object {},
+  "options": Object {
+    "extras": Object {},
+    "id": undefined,
+    "locked": true,
+    "position": Point {
+      "x": 0,
+      "y": 0,
+    },
+    "selected": true,
+    "type": "test",
+  },
+  "ports": Object {},
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 0,
+}
+`;
+
+exports[`NodeModel constructor and clone: With ID: clone 1`] = `
+NodeModel {
+  "height": 0,
+  "listeners": Object {},
+  "options": Object {
+    "id": "2",
+  },
+  "ports": Object {},
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 0,
+}
+`;
+
+exports[`NodeModel constructor and clone: With ID: initial 1`] = `
+NodeModel {
+  "height": 0,
+  "listeners": Object {},
+  "options": Object {
+    "extras": Object {},
+    "id": "1090",
+    "position": Point {
+      "x": 0,
+      "y": 0,
+    },
+    "type": "test",
+  },
+  "ports": Object {},
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 0,
+}
+`;
+
+exports[`NodeModel constructor and clone: With Ports: clone 1`] = `
+NodeModel {
+  "height": 0,
+  "listeners": Object {},
+  "options": Object {
+    "id": "2",
+  },
+  "ports": Object {
+    "port1": PortModel {
+      "links": Object {},
+      "listeners": Object {},
+      "options": Object {
+        "id": "3",
+        "name": "port1",
+        "type": "test",
+      },
+      "parent": [Circular],
+      "position": Point {
+        "x": 0,
+        "y": 0,
+      },
+      "reportedPosition": false,
+    },
+    "port2": PortModel {
+      "links": Object {},
+      "listeners": Object {},
+      "options": Object {
+        "id": "5",
+        "name": "port2",
+        "type": "test",
+      },
+      "parent": [Circular],
+      "position": Point {
+        "x": 0,
+        "y": 0,
+      },
+      "reportedPosition": false,
+    },
+  },
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 0,
+}
+`;
+
+exports[`NodeModel constructor and clone: With Ports: initial 1`] = `
+NodeModel {
+  "height": 0,
+  "listeners": Object {},
+  "options": Object {
+    "extras": Object {},
+    "id": undefined,
+    "locked": false,
+    "position": Point {
+      "x": 0,
+      "y": 0,
+    },
+    "selected": false,
+    "type": "test",
+  },
+  "ports": Object {
+    "port1": PortModel {
+      "links": Object {},
+      "listeners": Object {},
+      "options": Object {
+        "id": "1",
+        "name": "port1",
+        "type": "test",
+      },
+      "parent": [Circular],
+      "position": Point {
+        "x": 0,
+        "y": 0,
+      },
+      "reportedPosition": false,
+    },
+    "port2": PortModel {
+      "links": Object {},
+      "listeners": Object {},
+      "options": Object {
+        "id": "2",
+        "name": "port2",
+        "type": "test",
+      },
+      "parent": [Circular],
+      "position": Point {
+        "x": 0,
+        "y": 0,
+      },
+      "reportedPosition": false,
+    },
+  },
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 0,
+}
+`;
+
+exports[`NodeModel constructor and clone: simple: clone 1`] = `
+NodeModel {
+  "height": 0,
+  "listeners": Object {},
+  "options": Object {
+    "id": "2",
+  },
+  "ports": Object {},
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 0,
+}
+`;
+
+exports[`NodeModel constructor and clone: simple: initial 1`] = `
+NodeModel {
+  "height": 0,
+  "listeners": Object {},
+  "options": Object {
+    "extras": Object {},
+    "id": undefined,
+    "locked": false,
+    "position": Point {
+      "x": 0,
+      "y": 0,
+    },
+    "selected": false,
+    "type": "test",
+  },
+  "ports": Object {},
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 0,
+}
+`;
+
+exports[`NodeModel getBoundingBox: With Ports 1`] = `
+Rectangle {
+  "points": Array [
+    Point {
+      "x": 0,
+      "y": 0,
+    },
+    Point {
+      "x": 0,
+      "y": 0,
+    },
+    Point {
+      "x": 0,
+      "y": 0,
+    },
+    Point {
+      "x": 0,
+      "y": 0,
+    },
+  ],
+}
+`;
+
+exports[`NodeModel getBoundingBox: simple 1`] = `
+Rectangle {
+  "points": Array [
+    Point {
+      "x": 0,
+      "y": 0,
+    },
+    Point {
+      "x": 0,
+      "y": 0,
+    },
+    Point {
+      "x": 0,
+      "y": 0,
+    },
+    Point {
+      "x": 0,
+      "y": 0,
+    },
+  ],
+}
+`;
+
+exports[`NodeModel getBoundingBox: with height and width 1`] = `
+Rectangle {
+  "points": Array [
+    Point {
+      "x": 0,
+      "y": 0,
+    },
+    Point {
+      "x": 10,
+      "y": 0,
+    },
+    Point {
+      "x": 10,
+      "y": 20,
+    },
+    Point {
+      "x": 0,
+      "y": 20,
+    },
+  ],
+}
+`;
+
+exports[`NodeModel remove: With Ports 1`] = `
+NodeModel {
+  "height": 25,
+  "listeners": Object {},
+  "options": Object {
+    "extras": Object {},
+    "id": undefined,
+    "locked": false,
+    "position": Point {
+      "x": 0,
+      "y": 0,
+    },
+    "selected": false,
+    "type": "test",
+  },
+  "ports": Object {
+    "port1": PortModel {
+      "links": Object {
+        "2": LinkModel {
+          "labels": Array [],
+          "listeners": Object {},
+          "options": Object {
+            "id": "2",
+          },
+          "points": Array [
+            PointModel {
+              "listeners": Object {},
+              "options": Object {
+                "id": "3",
+                "link": [Circular],
+                "type": "point",
+              },
+              "parent": [Circular],
+              "position": Point {
+                "x": 0,
+                "y": 0,
+              },
+            },
+            PointModel {
+              "listeners": Object {},
+              "options": Object {
+                "id": "4",
+                "link": [Circular],
+                "type": "point",
+              },
+              "parent": [Circular],
+              "position": Point {
+                "x": 0,
+                "y": 0,
+              },
+            },
+          ],
+          "renderedPaths": Array [],
+          "sourcePort": null,
+          "targetPort": null,
+        },
+      },
+      "listeners": Object {},
+      "options": Object {
+        "id": "9",
+        "name": "port1",
+        "type": "test",
+      },
+      "parent": [Circular],
+      "position": Point {
+        "x": 0,
+        "y": 0,
+      },
+      "reportedPosition": false,
+    },
+    "port2": PortModel {
+      "links": Object {
+        "5": LinkModel {
+          "labels": Array [],
+          "listeners": Object {},
+          "options": Object {
+            "id": "5",
+          },
+          "points": Array [
+            PointModel {
+              "listeners": Object {},
+              "options": Object {
+                "id": "6",
+                "link": [Circular],
+                "type": "point",
+              },
+              "parent": [Circular],
+              "position": Point {
+                "x": 0,
+                "y": 0,
+              },
+            },
+            PointModel {
+              "listeners": Object {},
+              "options": Object {
+                "id": "7",
+                "link": [Circular],
+                "type": "point",
+              },
+              "parent": [Circular],
+              "position": Point {
+                "x": 0,
+                "y": 0,
+              },
+            },
+          ],
+          "renderedPaths": Array [],
+          "sourcePort": null,
+          "targetPort": null,
+        },
+      },
+      "listeners": Object {},
+      "options": Object {
+        "id": "10",
+        "name": "port2",
+        "type": "test",
+      },
+      "parent": [Circular],
+      "position": Point {
+        "x": 0,
+        "y": 0,
+      },
+      "reportedPosition": false,
+    },
+  },
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 15,
+}
+`;
+
+exports[`NodeModel remove: simple 1`] = `
+NodeModel {
+  "height": 0,
+  "listeners": Object {},
+  "options": Object {
+    "extras": Object {},
+    "id": undefined,
+    "locked": false,
+    "position": Point {
+      "x": 0,
+      "y": 0,
+    },
+    "selected": false,
+    "type": "test",
+  },
+  "ports": Object {},
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 0,
+}
+`;
+
+exports[`NodeModel remove: with height and width 1`] = `
+NodeModel {
+  "height": 20,
+  "listeners": Object {},
+  "options": Object {
+    "extras": Object {},
+    "id": undefined,
+    "locked": false,
+    "position": Point {
+      "x": 0,
+      "y": 0,
+    },
+    "selected": false,
+    "type": "test",
+  },
+  "ports": Object {},
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 10,
+}
+`;
+
+exports[`NodeModel serialize and deserialize: Locked and Selected 1`] = `
+Object {
+  "extras": Object {},
+  "id": undefined,
+  "locked": true,
+  "ports": Array [],
+  "selected": true,
+  "type": "test",
+  "x": 0,
+  "y": 0,
+}
+`;
+
+exports[`NodeModel serialize and deserialize: Locked and Selected 2`] = `
+NodeModel {
+  "height": 0,
+  "listeners": Object {},
+  "options": Object {
+    "extras": Object {},
+    "id": undefined,
+    "locked": true,
+    "position": Point {
+      "x": 10,
+      "y": 11,
+    },
+    "selected": true,
+    "type": "tests",
+  },
+  "ports": Object {},
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 0,
+}
+`;
+
+exports[`NodeModel serialize and deserialize: With ID 1`] = `
+Object {
+  "extras": Object {},
+  "id": "1090",
+  "locked": undefined,
+  "ports": Array [],
+  "selected": undefined,
+  "type": "test",
+  "x": 0,
+  "y": 0,
+}
+`;
+
+exports[`NodeModel serialize and deserialize: With ID 2`] = `
+NodeModel {
+  "height": 0,
+  "listeners": Object {},
+  "options": Object {
+    "extras": Object {},
+    "id": "1090",
+    "locked": undefined,
+    "position": Point {
+      "x": 10,
+      "y": 11,
+    },
+    "selected": undefined,
+    "type": "tests",
+  },
+  "ports": Object {},
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 0,
+}
+`;
+
+exports[`NodeModel serialize and deserialize: With Ports 1`] = `
+Object {
+  "extras": Object {},
+  "id": undefined,
+  "locked": false,
+  "ports": Array [
+    Object {
+      "alignment": undefined,
+      "extras": undefined,
+      "id": "3",
+      "links": Array [],
+      "locked": undefined,
+      "name": "port1",
+      "parentNode": undefined,
+      "selected": undefined,
+      "type": "test",
+      "x": 0,
+      "y": 0,
+    },
+    Object {
+      "alignment": undefined,
+      "extras": undefined,
+      "id": "4",
+      "links": Array [],
+      "locked": undefined,
+      "name": "port2",
+      "parentNode": undefined,
+      "selected": undefined,
+      "type": "test",
+      "x": 0,
+      "y": 0,
+    },
+  ],
+  "selected": false,
+  "type": "test",
+  "x": 0,
+  "y": 0,
+}
+`;
+
+exports[`NodeModel serialize and deserialize: With Ports 2`] = `
+NodeModel {
+  "height": 0,
+  "listeners": Object {},
+  "options": Object {
+    "extras": Object {},
+    "id": undefined,
+    "locked": false,
+    "position": Point {
+      "x": 10,
+      "y": 11,
+    },
+    "selected": false,
+    "type": "tests",
+  },
+  "ports": Object {
+    "port1": PortModel {
+      "links": Object {},
+      "listeners": Object {},
+      "options": Object {
+        "alignment": undefined,
+        "extras": undefined,
+        "id": "3",
+        "locked": undefined,
+        "name": "port1",
+        "selected": undefined,
+      },
+      "parent": [Circular],
+      "position": Point {
+        "x": 0,
+        "y": 0,
+      },
+      "reportedPosition": false,
+    },
+    "port2": PortModel {
+      "links": Object {},
+      "listeners": Object {},
+      "options": Object {
+        "alignment": undefined,
+        "extras": undefined,
+        "id": "4",
+        "locked": undefined,
+        "name": "port2",
+        "selected": undefined,
+      },
+      "parent": [Circular],
+      "position": Point {
+        "x": 0,
+        "y": 0,
+      },
+      "reportedPosition": false,
+    },
+  },
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 0,
+}
+`;
+
+exports[`NodeModel serialize and deserialize: simple 1`] = `
+Object {
+  "extras": Object {},
+  "id": undefined,
+  "locked": false,
+  "ports": Array [],
+  "selected": false,
+  "type": "test",
+  "x": 0,
+  "y": 0,
+}
+`;
+
+exports[`NodeModel serialize and deserialize: simple 2`] = `
+NodeModel {
+  "height": 0,
+  "listeners": Object {},
+  "options": Object {
+    "extras": Object {},
+    "id": undefined,
+    "locked": false,
+    "position": Point {
+      "x": 10,
+      "y": 11,
+    },
+    "selected": false,
+    "type": "tests",
+  },
+  "ports": Object {},
+  "position": Point {
+    "x": 0,
+    "y": 0,
+  },
+  "width": 0,
+}
+`;
+
+exports[`NodeModel setPosition: With Ports 1`] = `
+Point {
+  "x": 15,
+  "y": 25,
+}
+`;
+
+exports[`NodeModel setPosition: With Ports 2`] = `
+PortModel {
+  "links": Object {},
+  "listeners": Object {},
+  "options": Object {
+    "id": "7",
+    "name": "port1",
+    "type": "test",
+  },
+  "parent": NodeModel {
+    "height": 25,
+    "listeners": Object {},
+    "options": Object {
+      "extras": Object {},
+      "id": undefined,
+      "locked": false,
+      "position": Point {
+        "x": 0,
+        "y": 0,
+      },
+      "selected": false,
+      "type": "test",
+    },
+    "ports": Object {
+      "port1": [Circular],
+      "port2": PortModel {
+        "links": Object {},
+        "listeners": Object {},
+        "options": Object {
+          "id": "8",
+          "name": "port2",
+          "type": "test",
+        },
+        "parent": [Circular],
+        "position": Point {
+          "x": 15,
+          "y": 25,
+        },
+        "reportedPosition": false,
+      },
+    },
+    "position": Point {
+      "x": 15,
+      "y": 25,
+    },
+    "width": 15,
+  },
+  "position": Point {
+    "x": 15,
+    "y": 25,
+  },
+  "reportedPosition": false,
+}
+`;
+
+exports[`NodeModel setPosition: With Ports 3`] = `
+PortModel {
+  "links": Object {},
+  "listeners": Object {},
+  "options": Object {
+    "id": "8",
+    "name": "port2",
+    "type": "test",
+  },
+  "parent": NodeModel {
+    "height": 25,
+    "listeners": Object {},
+    "options": Object {
+      "extras": Object {},
+      "id": undefined,
+      "locked": false,
+      "position": Point {
+        "x": 0,
+        "y": 0,
+      },
+      "selected": false,
+      "type": "test",
+    },
+    "ports": Object {
+      "port1": PortModel {
+        "links": Object {},
+        "listeners": Object {},
+        "options": Object {
+          "id": "7",
+          "name": "port1",
+          "type": "test",
+        },
+        "parent": [Circular],
+        "position": Point {
+          "x": 15,
+          "y": 25,
+        },
+        "reportedPosition": false,
+      },
+      "port2": [Circular],
+    },
+    "position": Point {
+      "x": 15,
+      "y": 25,
+    },
+    "width": 15,
+  },
+  "position": Point {
+    "x": 15,
+    "y": 25,
+  },
+  "reportedPosition": false,
+}
+`;
+
+exports[`NodeModel setPosition: With Ports 4`] = `
+Point {
+  "x": 30,
+  "y": 50,
+}
+`;
+
+exports[`NodeModel setPosition: simple 1`] = `
+Point {
+  "x": 0,
+  "y": 0,
+}
+`;
+
+exports[`NodeModel setPosition: simple 2`] = `
+Point {
+  "x": 0,
+  "y": 0,
+}
+`;
+
+exports[`NodeModel setPosition: with height and width 1`] = `
+Point {
+  "x": 10,
+  "y": 20,
+}
+`;
+
+exports[`NodeModel setPosition: with height and width 2`] = `
+Point {
+  "x": 20,
+  "y": 40,
+}
+`;

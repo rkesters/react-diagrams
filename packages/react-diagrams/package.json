@@ -9,7 +9,8 @@
 	},
 	"scripts": {
 		"clean": "rimraf ./dist",
-		"build": "../../node_modules/.bin/webpack"
+		"build": "../../node_modules/.bin/webpack",
+    "test": "yarn jest --coverage --passWithNoTests"
 	},
 	"publishConfig": {
 		"access": "public"

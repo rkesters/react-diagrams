@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LinkLayerFactory generateReactWidget 1`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;

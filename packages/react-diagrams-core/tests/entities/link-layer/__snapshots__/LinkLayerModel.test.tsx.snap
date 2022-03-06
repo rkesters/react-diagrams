@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LinkLayerModel constructure 1`] = `
+LinkLayerModel {
+  "listeners": Object {},
+  "models": Object {},
+  "options": Object {
+    "id": "1",
+    "isSvg": true,
+    "transformed": true,
+    "type": "diagram-links",
+  },
+  "repaintEnabled": true,
+}
+`;

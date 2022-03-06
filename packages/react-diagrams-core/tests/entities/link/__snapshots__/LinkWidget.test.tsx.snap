@@ -1,0 +1,287 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LinkWidget Render 1`] = `
+<body>
+  <div>
+    <svg>
+      <g
+        data-linkid="1"
+      >
+        <div
+          id="linkFactory"
+        >
+           
+        </div>
+      </g>
+    </svg>
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 2`] = `
+<body>
+  <div>
+    <svg>
+      <g
+        data-linkid="1"
+      >
+        <div
+          id="linkFactory"
+        >
+           
+        </div>
+      </g>
+    </svg>
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 3`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 4`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 5`] = `
+<body>
+  <div>
+    <svg>
+      <g
+        data-linkid="1"
+      >
+        <div
+          id="linkFactory"
+        >
+           
+        </div>
+        <foreignobject
+          class="css-1ipt3tw"
+        >
+          <div
+            class="css-157va7r"
+          >
+            <div
+              id="labelFactory"
+            >
+               
+            </div>
+          </div>
+        </foreignobject>
+        <foreignobject
+          class="css-1ipt3tw"
+        >
+          <div
+            class="css-157va7r"
+          >
+            <div
+              id="labelFactory"
+            >
+               
+            </div>
+          </div>
+        </foreignobject>
+      </g>
+    </svg>
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 6`] = `
+<body>
+  <div>
+    <svg>
+      <g
+        data-linkid="1"
+      >
+        <div
+          id="linkFactory"
+        >
+           
+        </div>
+        <foreignobject
+          class="css-1ipt3tw"
+        >
+          <div
+            class="css-157va7r"
+          >
+            <div
+              id="labelFactory"
+            >
+               
+            </div>
+          </div>
+        </foreignobject>
+        <foreignobject
+          class="css-1ipt3tw"
+        >
+          <div
+            class="css-157va7r"
+          >
+            <div
+              id="labelFactory"
+            >
+               
+            </div>
+          </div>
+        </foreignobject>
+      </g>
+    </svg>
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 7`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 8`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 9`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 10`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 11`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 12`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 13`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 14`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 15`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 16`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 17`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 18`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 19`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 20`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 21`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 22`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 23`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Render 24`] = `
+<body>
+  <div>
+    <svg />
+  </div>
+</body>
+`;
+
+exports[`LinkWidget Static 1`] = `"M0,0 L 1,1"`;

@@ -6,3 +6,4 @@ module.exports = {
 		library: 'projectstorm/react-canvas-core'
 	}
 };
+
